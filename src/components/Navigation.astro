@@ -6,13 +6,12 @@ import LogoSvg from "../assets/images/logo.svg";
 // `disabled` is optional; when true, the item is rendered non-interactive
 const links = [
   { name: "Forside", href: "/" },
-  { name: "Se billett", href: "/billett" },
-  { name: "Booking", href: "/booking", disabled: true },
   { name: "Program", href: "/program" },
+  { name: "Billetter", href: "/billett" },
+  { name: "Påmelding", href: "/booking", disabled: true },
 ];
 
-const ticketLink = { name: "Kjøp billett", href: "https://tikkio.com/events/60480" };
-const heiskortLink = "https://sogndal.skiperformance.com/no/shopp#/no/buy?is_promo=1&is_promo_offer=0&promo_connector_id=8";
+const ticketLink = { name: "Les mer", href: "https://www.astudent.no/uka/" };
 const currentPath = Astro.url?.pathname || "/";
 ---
 
@@ -22,7 +21,7 @@ const currentPath = Astro.url?.pathname || "/";
       <!-- Logo -->
       <a href="/" draggable="false" class="flex items-center gap-2 nav-logo">
         <LogoSvg class="w-auto h-9" />
-        <span class="sr-only">Ski & Magi</span>
+        <span class="sr-only">U.-KA.</span>
       </a>
 
       <!-- Desktop Menu -->
@@ -34,22 +33,12 @@ const currentPath = Astro.url?.pathname || "/";
                 {l.name}
               </span>
             ) : (
-              <a href={l.href} target={l.href.startsWith("http") ? "_blank" : undefined} rel={l.href.startsWith("http") ? "noreferrer" : undefined} class={`relative transition-colors duration-300 hover:opacity-90 ${currentPath === l.href ? "font-semibold after:absolute after:-bottom-1.5 after:left-0 after:w-full after:h-0.5 after:bg-linear-to-r after:from-sky-400 after:to-fuchsia-400 after:rounded-full" : ""}`}>
+              <a href={l.href} target={l.href.startsWith("http") ? "_blank" : undefined} rel={l.href.startsWith("http") ? "noreferrer" : undefined} class={`relative transition-colors duration-300 hover:opacity-90 ${currentPath === l.href ? "font-semibold after:absolute after:-bottom-1.5 after:left-0 after:w-full after:h-0.5 after:bg-linear-to-r after:from-[#fdbc5b] after:to-[#f26f7a] after:rounded-full" : ""}`}>
                 {l.name}
               </a>
             )
           )
         }
-
-        <div class="nav-dropdown">
-          <button type="button" class="nav-dropdown__trigger" aria-haspopup="true"> Heiskort </button>
-          <div class="nav-dropdown__menu" role="menu">
-            <a class="nav-dropdown__item" href={heiskortLink} target="_blank" rel="noreferrer"> Link </a>
-            <span class="nav-dropdown__meta">
-              Promokode: <strong>Sogn2d</strong>
-            </span>
-          </div>
-        </div>
 
         <!-- CTA Button (enabled, matches CtaSection style) -->
         <CtaButton label={ticketLink.name} href={ticketLink.href} newTab class="px-5 py-2 ml-4 rounded-full text-sm hover:translate-y-0" />
@@ -79,15 +68,6 @@ const currentPath = Astro.url?.pathname || "/";
           )
         )
       }
-      <details class="mobile-dropdown">
-        <summary class="mobile-dropdown__summary block font-medium transition-colors opacity-80 hover:opacity-100">Heiskort</summary>
-        <div class="mobile-dropdown__content">
-          <a class="block pl-4 text-sm opacity-80 hover:opacity-100" href={heiskortLink} target="_blank" rel="noreferrer"> Kjøp </a>
-          <span class="block pl-4 text-xs text-white/70">
-            Promokode: <strong>Sogn2d</strong>
-          </span>
-        </div>
-      </details>
       <!-- CTA moved into the top bar on mobile -->
     </div>
   </nav>
@@ -122,8 +102,8 @@ const currentPath = Astro.url?.pathname || "/";
     }
 
     // Constants
-    const THEME_DARK = "#0b0f1a"; // over hero
-    const THEME_LIGHT = "#ffffff"; // past hero (light surface)
+    const THEME_DARK = "#fdbc5b"; // over hero
+    const THEME_LIGHT = "#eadfd0"; // past hero (light surface)
     const OFFSET_Y = 50; // early switch before bottom of hero hits nav
 
     // Only enable scroll-based tone change on the index page
@@ -322,7 +302,14 @@ const currentPath = Astro.url?.pathname || "/";
   /* Header glass background (no pseudo elements) */
   #site-header {
     isolation: isolate;
-    background: linear-gradient(120deg, rgba(59, 130, 246, 0.18), rgba(139, 92, 246, 0.16), rgba(236, 72, 153, 0.14)), rgba(17, 24, 39, 0.2);
+    background:
+      linear-gradient(
+        120deg,
+        rgba(253, 188, 91, 0.32),
+        rgba(242, 111, 122, 0.22),
+        rgba(132, 213, 243, 0.18)
+      ),
+      rgba(17, 24, 39, 0.2);
     backdrop-filter: saturate(180%) blur(22px);
     -webkit-backdrop-filter: saturate(180%) blur(22px);
   }
@@ -330,16 +317,11 @@ const currentPath = Astro.url?.pathname || "/";
   /* Nav text color (fixed, no scroll-based changes) */
   #site-nav,
   #site-nav a,
-  #site-nav .nav-logo,
-  #site-nav .cta-btn {
+  #site-nav .nav-logo {
     color: #fff;
   }
-  /* Logo primary (white parts) should follow nav tone */
-  #site-nav .nav-logo .cls-1 {
-    fill: #fff;
-    transition: fill 300ms cubic-bezier(0.4, 0, 0.2, 1);
-  }
   #site-nav .cta-btn {
+    color: #1b1b1b;
     transition: color 300ms cubic-bezier(0.4, 0, 0.2, 1);
   }
   #site-nav {

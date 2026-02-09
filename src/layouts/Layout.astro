@@ -3,14 +3,14 @@ import SiteMeta from "../components/SiteMeta.astro";
 import Navigation from "../components/Navigation.astro";
 import "../assets/styles/global.css";
 
-const { title = "Ski & Magi", description = "På Ski & Magi reiser omlag 400 studenter på en tredagers skitur i den norske fjellheimen. Dette har vært en tradisjon siden tidlig 90-tall og er det eldste arrangementet for studenter i Ålesund." } = Astro.props;
+const {
+  title = "U.-KA.",
+  description = "U.-KA. samler studenter og lokalbefolkning i Ålesund til en uke med konserter, show, foredrag og sosiale arrangementer.",
+} = Astro.props;
 ---
 
 <html lang="en" data-theme="cerberus">
   <head>
-    <!-- Performance: preconnect to Mux domains used by the Hero player -->
-    <link rel="preconnect" href="https://stream.mux.com" crossorigin />
-    <link rel="preconnect" href="https://image.mux.com" crossorigin />
     <SiteMeta title={title} description={description} />
   </head>
   <body class="text-neutral-900 bg-neutral-100">

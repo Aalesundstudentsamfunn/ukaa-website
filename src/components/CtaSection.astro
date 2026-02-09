@@ -9,9 +9,13 @@ export interface Props {
 }
 
 const props = Astro.props as Props;
-const { title = "Bli med på neste eventyr!", subtitle = "Hvert år blir bedre enn det forrige. Sikre din plass nå.", ctaLabel = "Kjøp billett" } = props;
+const {
+  title = "Bli med på U.-KA.",
+  subtitle = "Følg med på program og oppdateringer fra Ålesund Studentsamfunn.",
+  ctaLabel = "Les mer",
+} = props;
 
-const ctaHref = props.ctaHref ?? "https://tikkio.com/events/60480";
+const ctaHref = props.ctaHref ?? "https://www.astudent.no/uka/";
 ---
 
 <section class="w-full bg-neutral-100 mb-20">

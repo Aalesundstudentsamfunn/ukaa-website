@@ -4,7 +4,7 @@ import Footer from "../components/Footer.astro";
 import GlassPanel from "../components/ui/GlassPanel.astro";
 
 const title = "Billett";
-const desc = "Se detaljer om billetten din til vintermagien Sogndal, i en senere utgave vil du også ha mulighet til å overføre billetten din til noen andre.";
+const desc = "Se detaljer om billetten din til U.-KA.-arrangementene. I en senere utgave vil du også kunne overføre billetten din til noen andre.";
 const countryCodes = [
   { value: "+47", label: "🇳🇴 +47" },
   { value: "+46", label: "🇸🇪 +46" },
@@ -41,7 +41,7 @@ const countryCodes = [
             <label for="ticketId" class="sr-only">Billett-ID</label>
             <input id="ticketId" name="ticketId" inputmode="text" autocomplete="off" placeholder="F.eks. ABC123" pattern="[A-Za-z0-9\-]{3,}" class="w-full rounded-lg border border-white/30 bg-white/10 backdrop-blur px-4 py-3 text-white placeholder-white/70 outline-none focus:ring-2 focus:ring-white/60" />
           </div>
-          <button type="submit" class="cta-btn inline-flex items-center justify-center rounded-lg bg-white/90 text-sky-900 px-6 py-3 font-semibold shadow-sm transition hover:bg-white">Hent billett</button>
+          <button type="submit" class="cta-btn inline-flex items-center justify-center rounded-lg bg-white/90 text-neutral-900 px-6 py-3 font-semibold shadow-sm transition hover:bg-white">Hent billett</button>
         </form>
 
         <p id="form-help" class="mt-2 text-sm text-white/80">Bruk koden fra e-posten din. Bare tall, bokstaver og bindestrek.</p>
@@ -161,18 +161,18 @@ const countryCodes = [
         <div class="mt-4 grid gap-3 sm:grid-cols-2">
           <div class="sm:col-span-2">
             <label for="newName" class="text-sm text-neutral-700">Fullt navn</label>
-            <input id="newName" name="newName" required class="mt-1 w-full rounded-lg border border-black/15 bg-white px-3 py-2 text-neutral-900 outline-none focus:ring-2 focus:ring-indigo-500/60" />
+            <input id="newName" name="newName" required class="mt-1 w-full rounded-lg border border-black/15 bg-white px-3 py-2 text-neutral-900 outline-none focus:ring-2 focus:ring-[#fdbc5b]/70" />
           </div>
           <div class="sm:col-span-2">
             <label for="newEmail" class="text-sm text-neutral-700">E-post</label>
-            <input id="newEmail" name="newEmail" type="email" required class="mt-1 w-full rounded-lg border border-black/15 bg-white px-3 py-2 text-neutral-900 outline-none focus:ring-2 focus:ring-indigo-500/60" />
+            <input id="newEmail" name="newEmail" type="email" required class="mt-1 w-full rounded-lg border border-black/15 bg-white px-3 py-2 text-neutral-900 outline-none focus:ring-2 focus:ring-[#fdbc5b]/70" />
           </div>
           <div class="sm:col-span-2">
             <label for="newPhone" class="text-sm text-neutral-700">Telefon</label>
             <div class="mt-1 flex flex-col gap-2 sm:flex-row sm:items-center">
               <div class="relative w-full sm:w-32" data-select data-default="+47" data-placeholder="+47">
                 <input id="newCountryCode" name="newCountryCode" type="hidden" value="+47" data-select-value required />
-                <button type="button" data-select-trigger aria-label="Landkode" aria-haspopup="listbox" aria-expanded="false" class="flex w-full items-center justify-between gap-2 rounded-lg border border-black/15 bg-white px-3 py-2 text-left text-neutral-900 outline-none focus:ring-2 focus:ring-indigo-500/60">
+                <button type="button" data-select-trigger aria-label="Landkode" aria-haspopup="listbox" aria-expanded="false" class="flex w-full items-center justify-between gap-2 rounded-lg border border-black/15 bg-white px-3 py-2 text-left text-neutral-900 outline-none focus:ring-2 focus:ring-[#fdbc5b]/70">
                   <span data-select-label class="whitespace-nowrap">+47</span>
                   <svg data-select-chevron viewBox="0 0 20 20" aria-hidden="true" class="h-4 w-4 text-neutral-500 transition-transform">
                     <path d="M5 7.5l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -190,13 +190,13 @@ const countryCodes = [
                   }
                 </ul>
               </div>
-              <input id="newPhone" name="newPhone" type="tel" inputmode="numeric" minlength="8" maxlength="8" pattern="\\d{8}" required class="w-full min-w-0 flex-1 rounded-lg border border-black/15 bg-white px-3 py-2 text-neutral-900 outline-none focus:ring-2 focus:ring-indigo-500/60" />
+              <input id="newPhone" name="newPhone" type="tel" inputmode="numeric" minlength="8" maxlength="8" pattern="\\d{8}" required class="w-full min-w-0 flex-1 rounded-lg border border-black/15 bg-white px-3 py-2 text-neutral-900 outline-none focus:ring-2 focus:ring-[#fdbc5b]/70" />
             </div>
           </div>
         </div>
         <div class="mt-5 flex justify-end gap-2">
           <button type="button" data-close class="rounded-md px-3 py-2 text-sm font-medium text-neutral-700 ring-1 ring-black/10 hover:bg-neutral-100">Avbryt</button>
-          <button type="submit" data-transfer-submit class="rounded-md px-3 py-2 text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700">Send inn</button>
+          <button type="submit" data-transfer-submit class="rounded-md px-3 py-2 text-sm font-semibold text-neutral-900 bg-[#fdbc5b] hover:bg-[#f26f7a]">Send inn</button>
         </div>
       </form>
     </div>

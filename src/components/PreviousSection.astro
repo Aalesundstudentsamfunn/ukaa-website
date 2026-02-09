@@ -30,7 +30,11 @@ const memoryEntries: MemoryEntry[] = await getCollection("memories");
 const contentItems: Memory[] = memoryEntries.map((entry) => entry.data as Memory).sort((a, b) => Number(b.year) - Number(a.year));
 
 // Allow overrides via props
-const { heading = "Magiske minner fra tidligere år", subheading = "Hvert år skaper vi nye eventyr på nye steder. Se hvor magien har tatt oss.", items = contentItems } = Astro.props as Props;
+const {
+  heading = "Høydepunkter fra tidligere U.-KA.",
+  subheading = "Store konserter, små øyeblikk og minner fra studentfestivalen i Ålesund.",
+  items = contentItems,
+} = Astro.props as Props;
 ---
 
 <section class="w-full bg-neutral-100">

@@ -3,9 +3,9 @@ import PageLayout from "../layouts/PageLayout.astro";
 import Footer from "../components/Footer.astro";
 import GlassPanel from "../components/ui/GlassPanel.astro";
 
-const title = "Booking";
-const desc = "Send inn romønsker til Ski & Magi i Sogndal. Fyll inn romtype, romansvarlig og kontaktinfo for alle på rommet.";
-const ticketIdHelp = "Finnes på Tikkio under billetter eller i e-posten din fra Tikkio. Referanse-ID er det samme.";
+const title = "Påmelding";
+const desc = "Send inn romønsker i forbindelse med U.-KA. Fyll inn romtype, romansvarlig og kontaktinfo for alle på rommet.";
+const ticketIdHelp = "Finnes i billettbekreftelsen din (e-post) eller i billettportalen. Referanse-ID er det samme.";
 const roomTypes = [
   { value: "2", label: "2 personer" },
   { value: "3", label: "3 personer" },
@@ -106,7 +106,7 @@ const countryCodes = [
                 <p id="ticketIdHelp1" data-help-panel hidden class="mt-2 text-xs text-white/70">{ticketIdHelp}</p>
                 <div class="mt-1 grid gap-3 sm:grid-cols-[1fr_auto]">
                   <input id="ticketId1" name="ticketId1" data-ticket-input="1" inputmode="text" autocomplete="off" placeholder="F.eks. ABC123" required class="w-full rounded-lg border border-white/20 bg-white/10 px-4 py-3 text-white placeholder-white/60 outline-none focus:ring-2 focus:ring-white/60" />
-                  <button type="button" data-ticket-check="1" class="inline-flex items-center justify-center rounded-lg bg-white/90 text-sky-900 px-6 py-3 font-semibold shadow-sm transition hover:bg-white"> Hent detaljer </button>
+                  <button type="button" data-ticket-check="1" class="inline-flex items-center justify-center rounded-lg bg-white/90 text-neutral-900 px-6 py-3 font-semibold shadow-sm transition hover:bg-white"> Hent detaljer </button>
                 </div>
                 <p data-ticket-status="1" class="mt-2 text-sm text-white/75"></p>
               </div>
@@ -176,7 +176,7 @@ const countryCodes = [
                 <p id="ticketIdHelp2" data-help-panel hidden class="mt-2 text-xs text-white/70">{ticketIdHelp}</p>
                 <div class="mt-1 grid gap-3 sm:grid-cols-[1fr_auto]">
                   <input id="ticketId2" name="ticketId2" data-ticket-input="2" inputmode="text" autocomplete="off" placeholder="F.eks. ABC123" required class="w-full rounded-lg border border-white/20 bg-white/10 px-4 py-3 text-white placeholder-white/60 outline-none focus:ring-2 focus:ring-white/60" />
-                  <button type="button" data-ticket-check="2" class="inline-flex items-center justify-center rounded-lg bg-white/90 text-sky-900 px-6 py-3 font-semibold shadow-sm transition hover:bg-white"> Hent detaljer </button>
+                  <button type="button" data-ticket-check="2" class="inline-flex items-center justify-center rounded-lg bg-white/90 text-neutral-900 px-6 py-3 font-semibold shadow-sm transition hover:bg-white"> Hent detaljer </button>
                 </div>
                 <p data-ticket-status="2" class="mt-2 text-sm text-white/75"></p>
               </div>
@@ -239,7 +239,7 @@ const countryCodes = [
                 <p id="ticketIdHelp3" data-help-panel hidden class="mt-2 text-xs text-white/70">{ticketIdHelp}</p>
                 <div class="mt-1 grid gap-3 sm:grid-cols-[1fr_auto]">
                   <input id="ticketId3" name="ticketId3" data-ticket-input="3" inputmode="text" autocomplete="off" placeholder="F.eks. ABC123" required class="w-full rounded-lg border border-white/20 bg-white/10 px-4 py-3 text-white placeholder-white/60 outline-none focus:ring-2 focus:ring-white/60" />
-                  <button type="button" data-ticket-check="3" class="inline-flex items-center justify-center rounded-lg bg-white/90 text-sky-900 px-6 py-3 font-semibold shadow-sm transition hover:bg-white"> Hent detaljer </button>
+                  <button type="button" data-ticket-check="3" class="inline-flex items-center justify-center rounded-lg bg-white/90 text-neutral-900 px-6 py-3 font-semibold shadow-sm transition hover:bg-white"> Hent detaljer </button>
                 </div>
                 <p data-ticket-status="3" class="mt-2 text-sm text-white/75"></p>
               </div>
@@ -302,7 +302,7 @@ const countryCodes = [
                 <p id="ticketIdHelp4" data-help-panel hidden class="mt-2 text-xs text-white/70">{ticketIdHelp}</p>
                 <div class="mt-1 grid gap-3 sm:grid-cols-[1fr_auto]">
                   <input id="ticketId4" name="ticketId4" data-ticket-input="4" inputmode="text" autocomplete="off" placeholder="F.eks. ABC123" required class="w-full rounded-lg border border-white/20 bg-white/10 px-4 py-3 text-white placeholder-white/60 outline-none focus:ring-2 focus:ring-white/60" />
-                  <button type="button" data-ticket-check="4" class="inline-flex items-center justify-center rounded-lg bg-white/90 text-sky-900 px-6 py-3 font-semibold shadow-sm transition hover:bg-white"> Hent detaljer </button>
+                  <button type="button" data-ticket-check="4" class="inline-flex items-center justify-center rounded-lg bg-white/90 text-neutral-900 px-6 py-3 font-semibold shadow-sm transition hover:bg-white"> Hent detaljer </button>
                 </div>
                 <p data-ticket-status="4" class="mt-2 text-sm text-white/75"></p>
               </div>
@@ -359,7 +359,7 @@ const countryCodes = [
               <label for="termsToggle">Jeg forstår og godtar</label><button type="button" data-terms-open class="ml-1 inline-flex items-center underline decoration-white/50 underline-offset-2 transition hover:decoration-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"> vilkårene for booking </button>.
             </p>
           </div>
-          <button id="booking-submit" type="submit" class="inline-flex items-center justify-center rounded-full bg-white/95 px-6 py-3 text-sm font-semibold text-sky-900 shadow-lg shadow-sky-500/20 transition hover:bg-white">
+          <button id="booking-submit" type="submit" class="inline-flex items-center justify-center rounded-full bg-white/95 px-6 py-3 text-sm font-semibold text-neutral-900 shadow-[0_12px_30px_rgba(253,188,91,0.22)] transition hover:bg-white">
             <span data-label>Send inn rombooking</span>
           </button>
         </div>

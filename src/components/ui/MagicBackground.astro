@@ -8,10 +8,10 @@ const { class: cls = "", showTopRule = false, sparkles = true } = Astro.props;
 ---
 
 <div aria-hidden class={`absolute inset-0 -z-10 ${cls}`}>
-  <div class="absolute inset-0 bg-gradient-to-br from-[#0b0f1a] via-sky-950/70 to-cyan-900/60"></div>
-  <div class="absolute inset-0 animate-aurora opacity-80" style="background: linear-gradient(120deg, rgba(27,166,223,0.28), rgba(59,130,246,0.18), rgba(14,165,233,0.16)); background-size: 200% 200%;"></div>
-  <div class="absolute -left-24 -top-24 h-64 w-64 rounded-full blur-3xl bg-cyan-400/25"></div>
-  <div class="absolute -right-24 -bottom-16 h-64 w-64 rounded-full blur-3xl bg-sky-400/25"></div>
+  <div class="absolute inset-0 bg-gradient-to-br from-[#1b1b1b] via-[#f26f7a]/18 to-[#84d5f3]/28"></div>
+  <div class="absolute inset-0 animate-aurora opacity-80" style="background: linear-gradient(120deg, rgba(253,188,91,0.28), rgba(242,111,122,0.18), rgba(129,201,151,0.16)); background-size: 200% 200%;"></div>
+  <div class="absolute -left-24 -top-24 h-64 w-64 rounded-full blur-3xl bg-[#fdbc5b]/25"></div>
+  <div class="absolute -right-24 -bottom-16 h-64 w-64 rounded-full blur-3xl bg-[#81c997]/25"></div>
 
   {sparkles && (
     <div class="pointer-events-none absolute inset-0">
