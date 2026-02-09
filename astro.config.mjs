@@ -9,7 +9,7 @@ import netlify from "@astrojs/netlify";
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://skiogmagi.no",
+  site: "https://ukaa.no",
   prefetch: true,
   vite: {
     plugins: [tailwindcss()],
