@@ -15,6 +15,7 @@
     "@astrojs/react": "^4.4.1",
     "@heroicons/react": "^2.2.0",
     "@iconify-json/mdi": "^1.2.3",
+    "@mux/mux-player-astro": "^3.11.5",
     "@netlify/blobs": "^10.5.0",
     "@skeletonlabs/skeleton": "^4.3.0",
     "@tailwindcss/vite": "^4.1.16",
