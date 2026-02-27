@@ -14,23 +14,26 @@ const { label, href, disabled = false, class: cls = "", newTab = false } = Astro
 
 const targetProps = newTab ? { target: "_blank", rel: "noreferrer noopener" } : {};
 
-const base = "cta-btn rounded-full px-7 py-3 text-neutral-900";
-const enabled = "bg-gradient-to-r from-[#fdbc5b] to-[#f26f7a] shadow-[0_10px_30px_rgba(253,188,91,0.28)] hover:-translate-y-0.5 active:translate-y-0 inline-flex items-center gap-2";
-const disabledCls = "bg-gradient-to-r from-neutral-400 to-neutral-500 opacity-60 cursor-not-allowed inline-flex items-center gap-2";
+const base =
+  "cta-btn rounded-full px-6 py-2.5 text-[0.98rem] font-bold leading-none text-[#20180d] border border-[#b98f46]/55 " +
+  "inline-flex items-center gap-2.5 transition-[transform,box-shadow,border-color,filter] duration-200";
+const enabled =
+  "bg-[linear-gradient(120deg,#fdbc5b_0%,#f6cb73_46%,#f26f7a_100%)] shadow-[0_6px_16px_rgba(210,145,40,0.2)] " +
+  "hover:-translate-y-px hover:shadow-[0_10px_20px_rgba(210,145,40,0.24)] hover:border-[#ad7c2e]/65 active:translate-y-0";
+const disabledCls =
+  "bg-gradient-to-r from-neutral-300 to-neutral-400 opacity-60 cursor-not-allowed inline-flex items-center gap-2.5 border-neutral-400";
 ---
 
 {
   !disabled && href ? (
     <Button href={href} class={`${base} ${enabled} ${cls}`} {...targetProps}>
       <span>{label}</span>
-      <ExternalLink class="w-5 h-5 opacity-90" />
-      <span class="pointer-events-none shine" />
+      <ExternalLink class="h-4 w-4 opacity-90" />
     </Button>
   ) : (
     <Button class={`${base} ${disabled ? disabledCls : enabled} ${cls}`} disabled={disabled}>
       <span>{label}</span>
-      {!disabled && <ExternalLink class="w-5 h-5 opacity-90" />}
-      {!disabled && <span class="pointer-events-none shine" />}
+      {!disabled && <ExternalLink class="h-4 w-4 opacity-90" />}
     </Button>
   )
 }

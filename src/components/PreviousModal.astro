@@ -4,7 +4,8 @@ import { CldImage } from "astro-cloudinary";
 export interface Props {
   id: string;
   title: string;
-  year: string;
+  meta?: string;
+  year?: string;
   tag?: string;
   people?: string;
   blurb?: string;
@@ -12,7 +13,8 @@ export interface Props {
   tint: string;
 }
 
-const { id, title, year, tag, people, blurb, gallery = [], tint } = Astro.props as Props;
+const { id, title, meta, year, tag, people, blurb, gallery = [], tint } = Astro.props as Props;
+const metaLabel = meta ?? year;
 
 const headingId = `${id}-title`;
 ---
@@ -32,7 +34,7 @@ const headingId = `${id}-title`;
 
           <h3 id={headingId} class="truncate text-xl font-bold text-neutral-900 sm:text-2xl">
             {title}
-            <span class="font-semibold text-neutral-500"> • {year}</span>
+            {metaLabel && <span class="font-semibold text-neutral-500"> • {metaLabel}</span>}
           </h3>
 
           {people && <p class="mt-1 text-sm text-neutral-500">{people}</p>}

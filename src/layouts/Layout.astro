@@ -13,9 +13,9 @@ const {
   <head>
     <SiteMeta title={title} description={description} />
   </head>
-  <body class="text-neutral-900 bg-neutral-100">
+  <body class="text-neutral-900">
     <Navigation />
-    <main class="min-h-svh flex flex-col">
+    <main class="relative min-h-svh flex flex-col overflow-hidden">
       <slot />
     </main>
   </body>

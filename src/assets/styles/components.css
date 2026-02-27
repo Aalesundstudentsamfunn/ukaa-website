@@ -54,21 +54,9 @@ dialog.modal:focus-within { outline: none; }
 
 /* CTA button shine sweep */
 .cta-btn {
-  position: relative; overflow: hidden; animation: aurora 12s ease-in-out infinite;
-  /* Tunable shine variables with sensible defaults */
-  --shine-duration: 900ms;
-  --shine-opacity: 0.9;
-  --shine-width: 50%;
+  position: relative;
+  overflow: hidden;
 }
-.cta-btn .shine {
-  position: absolute;
-  inset: auto;
-  top: 0; left: -150%; height: 100%; width: var(--shine-width);
-  background: linear-gradient(115deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.45) 50%, rgba(255, 255, 255, 0) 100%);
-  transform: skewX(-20deg);
-  opacity: 0; transition: opacity 0.2s ease;
-}
-.cta-btn:hover .shine { animation: shine-sweep var(--shine-duration) ease forwards; opacity: var(--shine-opacity); }
 
 /* Memory card special effects (sparkle keyframes in animations.css) */
 .sparkle {
@@ -100,7 +88,7 @@ dialog.modal:focus-within { outline: none; }
 
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
-  .animate-aurora, .sparkle, .memory-card::before, .memory-card::after, .cta-btn .shine {
+  .animate-aurora, .sparkle, .memory-card::before, .memory-card::after {
     animation: none !important; transition: none !important; opacity: 0.4;
   }
 }

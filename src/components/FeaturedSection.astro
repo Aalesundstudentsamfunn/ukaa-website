@@ -1,15 +1,12 @@
 ---
 import MemoryCard from "./PreviousCard.astro";
 import MemoryModal from "./PreviousModal.astro";
-import { getCollection, type CollectionEntry } from "astro:content";
-
-type MemoryEntry = CollectionEntry<"memories">;
 
 export interface Memory {
   id: string;
   title: string;
   tag?: string;
-  year: string;
+  meta?: string;
   people?: string;
   img: string;
   tint: string;
@@ -23,27 +20,58 @@ export interface Props {
   items?: Memory[];
 }
 
-// Load from content collection
-const memoryEntries: MemoryEntry[] = await getCollection("memories");
-
-// Map to plain Memory objects & sort by year (newest first)
-const contentItems: Memory[] = memoryEntries.map((entry) => entry.data as Memory).sort((a, b) => Number(b.year) - Number(a.year));
+const featuredItems: Memory[] = [
+  {
+    id: "familiedager",
+    title: "Familiedager",
+    tag: "For små og store",
+    meta: "I mars",
+    people: "For hele byen",
+    img: "skiogmagi_2024_2_yaqafl",
+    tint: "from-[#fdbc5b]/60 via-[#84d5f3]/45 to-[#81c997]/35",
+    blurb: "Åpne dager med aktiviteter som passer både familier, studenter og venner.",
+    gallery: ["skiogmagi_2024_2_yaqafl", "skiogmagi_2024_4_rrpvxk", "skiogmagi_2025_6_yszso8"],
+  },
+  {
+    id: "konserter",
+    title: "Konserter",
+    tag: "Live-opplevelser",
+    meta: "Under U.-KA.",
+    people: "Lokale og nasjonale artister",
+    img: "skiogmagi_2025_1_yweuhz",
+    tint: "from-[#f26f7a]/55 via-[#fdbc5b]/50 to-[#84d5f3]/35",
+    blurb: "Store scener, nye favoritter og kvelder som samler hele Ålesund.",
+    gallery: ["skiogmagi_2025_1_yweuhz", "skiogmagi_2025_10_hmvmyn", "skiogmagi_2025_12_vd6xmj"],
+  },
+  {
+    id: "annet",
+    title: "Annet",
+    tag: "Sosialt",
+    meta: "Ca. 10 dager",
+    people: "Med studentmiljøet",
+    img: "skiogmagi_2024_3_ardl4j",
+    tint: "from-[#81c997]/55 via-[#84d5f3]/45 to-[#fdbc5b]/35",
+    blurb: "Lav terskel, høy stemning – temaer, quiz og møteplasser som bygger fellesskap.",
+    gallery: ["skiogmagi_2024_3_ardl4j", "skiogmagi_2024_7_liqvei", "skiogmagi_2025_8_boriq6"],
+  },
+];
 
 // Allow overrides via props
 const {
   heading = "Utvalgt fra U.-KA.",
-  subheading = "En kuratert samling av øyeblikk og opplevelser fra studentfestivalen i Ålesund.",
-  items = contentItems,
+  subheading = "Et utvalg høydepunkter fra studentfestivalen i Ålesund.",
+  items = featuredItems,
 } = Astro.props as Props;
 ---
 
-<section class="w-full bg-neutral-100">
-  <div class="max-w-6xl px-6 mx-auto py-10 lg:py-14">
-    <div class="mb-8 text-center">
-      <h2 class="text-3xl font-extrabold tracking-tight sm:text-4xl text-neutral-900">
+<section class="w-full bg-[#f7ecd8]">
+  <div class="max-w-6xl px-6 mx-auto py-12 lg:py-16">
+    <div class="mb-9 text-center">
+      <p class="text-[0.68rem] uppercase tracking-[0.32em] font-bold text-[#78633e]">I Mars</p>
+      <h2 class="mt-2 text-3xl font-extrabold tracking-tight sm:text-4xl text-neutral-900">
         {heading}
       </h2>
-      <p class="mt-2 text-neutral-500">{subheading}</p>
+      <p class="mx-auto mt-2 max-w-3xl text-neutral-600">{subheading}</p>
     </div>
 
     <div class="grid gap-6 sm:gap-7 lg:grid-cols-3">

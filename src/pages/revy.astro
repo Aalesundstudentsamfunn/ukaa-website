@@ -1,0 +1,300 @@
+---
+import PageLayout from "../layouts/PageLayout.astro";
+import Footer from "../components/Footer.astro";
+
+type RevyShow = {
+  title: string;
+  day: string;
+  date: string;
+  time: string;
+  location: string;
+  description: string;
+};
+
+const title = "Revyen";
+const description =
+  "U.-KA.-Revyen er sceneshowet under U.-KA. med humor, musikk og studentliv i fokus.";
+const ticketHref = "https://tikkio.com/organizer/2624-ass-alesund-studentsamfunn";
+
+const revyShows: RevyShow[] = [
+  {
+    title: "U.-KA. Revyen",
+    day: "Fredag",
+    date: "13. mars",
+    time: "18:30",
+    location: "Parken Kulturhus",
+    description: "Første forestilling fredag kveld.",
+  },
+  {
+    title: "U.-KA. Revyen",
+    day: "Fredag",
+    date: "13. mars",
+    time: "21:00",
+    location: "Parken Kulturhus",
+    description: "Senforestilling med fullt revytrykk.",
+  },
+  {
+    title: "U.-KA. Revyen",
+    day: "Lørdag",
+    date: "14. mars",
+    time: "19:00",
+    location: "Parken Kulturhus",
+    description: "Ekstraforestilling lørdag kveld.",
+  },
+];
+---
+
+<PageLayout title={title} description={description}>
+  <div class="revy-page">
+    <section class="mx-auto mt-20 w-full max-w-6xl px-6 pb-10 pt-10 sm:mt-24 sm:pt-12">
+      <div class="revy-hero">
+        <p class="revy-kicker">U.-KA. 2026</p>
+        <h1 class="revy-title">U.-KA.-Revyen</h1>
+        <p class="revy-subtitle">
+          Revyen er et av høydepunktene under U.-KA. med sketsjer, musikk, dans og tydelig studentpuls
+          i Ålesund.
+        </p>
+        <div class="mt-7 flex flex-wrap gap-3">
+          <a href="/program" class="inline-flex items-center rounded-full border border-[#b89c5d] bg-white/65 px-6 py-3 font-semibold text-neutral-900 transition hover:bg-white">
+            Se hele programmet
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="mx-auto mt-6 w-full max-w-6xl px-6 pb-10 pt-2 sm:mt-10 sm:pb-14 sm:pt-3">
+      <div class="mb-6">
+        <h2 class="text-2xl font-extrabold text-neutral-900 sm:text-3xl">Forestillinger</h2>
+      </div>
+
+      {revyShows.length > 0 ? (
+        <div class="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+          {revyShows.map((show) => (
+            <article class="show-card show-card--day">
+              <div class="show-card__head">
+                <span class="show-card__date">{show.date}</span>
+                <span class="chip">{show.day}</span>
+              </div>
+              <h3 class="mt-3 text-2xl font-extrabold text-neutral-900">{show.title}</h3>
+              <p class="mt-2 text-neutral-700">{show.description}</p>
+              <div class="mt-4 flex flex-wrap items-center gap-2 text-sm">
+                <span class="chip">{show.location}</span>
+                <span class="show-card__time">{show.time}</span>
+              </div>
+              <div class="mt-5">
+                <a href={ticketHref} target="_blank" rel="noreferrer" class="slot-link">
+                  Billetter
+                </a>
+              </div>
+            </article>
+          ))}
+        </div>
+      ) : (
+        <article class="show-card">
+          <div class="show-card__head">
+            <span class="show-card__date">Mars 2026</span>
+            <span class="show-card__time">TBA</span>
+          </div>
+          <h3 class="mt-3 text-2xl font-extrabold text-neutral-900">Programslipp kommer</h3>
+          <p class="mt-2 text-neutral-700">
+            Forestillingsdatoer og klokkeslett legges ut fortløpende.
+          </p>
+        </article>
+      )}
+    </section>
+
+    <section class="mx-auto w-full max-w-6xl px-6 pb-20 pt-2 sm:pt-4">
+      <div class="info-grid">
+        <article class="info-card">
+          <h3>Hva er U.-KA.-Revyen?</h3>
+          <p>
+            Et studentdrevet sceneshow med humor, musikalske innslag og lokale referanser. Revyen produseres
+            av studenter i Ålesund Studentsamfunn.
+          </p>
+        </article>
+        <article class="info-card">
+          <h3>Billetter</h3>
+          <p>
+            Billetter kjøpes via Tikkio. Ved utsolgt forestilling kan nye slipp komme, så følg med på
+            oppdateringer.
+          </p>
+          <a href={ticketHref} target="_blank" rel="noreferrer" class="info-link">Gå til billettsiden</a>
+        </article>
+        <article class="info-card">
+          <h3>Spørsmål</h3>
+          <p>
+            Kontakt arrangør på <a href="mailto:ukaa@astudent.no" class="inline-link">ukaa@astudent.no</a>
+            for spørsmål om forestilling, tilgjengelighet eller billetter.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <Footer />
+  </div>
+</PageLayout>
+
+<style is:global>
+  .revy-page {
+    background: #f7ecd8;
+    min-height: 100svh;
+  }
+
+  .revy-hero {
+    position: relative;
+    border-radius: 1.75rem;
+    padding: 2rem;
+    border: 1px solid rgba(194, 157, 74, 0.5);
+    background:
+      radial-gradient(circle at 8% 0%, rgba(132, 213, 243, 0.26), transparent 45%),
+      radial-gradient(circle at 88% 0%, rgba(129, 201, 151, 0.2), transparent 46%),
+      linear-gradient(140deg, rgba(253, 188, 91, 0.35), rgba(253, 188, 91, 0.16));
+    box-shadow: 0 16px 34px rgba(164, 123, 36, 0.16);
+  }
+
+  .revy-kicker {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.28em;
+    font-weight: 800;
+    color: rgba(40, 34, 22, 0.82);
+  }
+
+  .revy-title {
+    margin-top: 0.6rem;
+    font-size: clamp(2.15rem, 4.4vw, 3.6rem);
+    font-weight: 900;
+    color: #181818;
+    line-height: 1.12;
+  }
+
+  .revy-subtitle {
+    margin-top: 0.9rem;
+    max-width: 52ch;
+    color: rgba(35, 35, 35, 0.78);
+    font-size: 1.05rem;
+  }
+
+  .show-card {
+    border: 1px solid rgba(210, 175, 100, 0.78);
+    background:
+      radial-gradient(circle at 100% 0%, rgba(242, 111, 122, 0.12), transparent 46%),
+      radial-gradient(circle at 0% 0%, rgba(132, 213, 243, 0.17), transparent 42%),
+      #fff8ec;
+    border-radius: 1.3rem;
+    padding: 1.2rem 1.2rem 1.1rem;
+    box-shadow: 0 12px 30px rgba(162, 127, 58, 0.14);
+  }
+
+  .show-card--day {
+    padding: 1.25rem;
+  }
+
+  .show-card__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.8rem;
+  }
+
+  .show-card__date {
+    display: inline-flex;
+    border-radius: 999px;
+    background: rgba(253, 188, 91, 0.4);
+    border: 1px solid rgba(194, 157, 74, 0.4);
+    padding: 0.26rem 0.65rem;
+    font-size: 0.84rem;
+    font-weight: 700;
+    color: #3b2f1f;
+  }
+
+  .show-card__time {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 999px;
+    border: 1px solid rgba(176, 147, 79, 0.45);
+    background: rgba(253, 188, 91, 0.28);
+    padding: 0.2rem 0.6rem;
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: #574628;
+  }
+
+  .slot-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    border: 1px solid rgba(194, 157, 74, 0.55);
+    background: linear-gradient(120deg, rgba(253, 188, 91, 0.96), rgba(242, 111, 122, 0.92));
+    color: #1f1f1f;
+    font-weight: 800;
+    font-size: 0.85rem;
+    padding: 0.32rem 0.72rem;
+    text-decoration: none;
+  }
+
+  .slot-link:hover {
+    filter: brightness(1.03);
+  }
+
+  .chip {
+    display: inline-flex;
+    border-radius: 999px;
+    padding: 0.18rem 0.66rem;
+    border: 1px solid rgba(176, 147, 79, 0.45);
+    background: rgba(255, 255, 255, 0.68);
+    color: rgba(50, 42, 28, 0.9);
+  }
+
+  .info-grid {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .info-card {
+    border-radius: 1.2rem;
+    border: 1px solid rgba(210, 175, 100, 0.68);
+    background: #fff8ed;
+    padding: 1rem 1.1rem;
+  }
+
+  .info-card h3 {
+    color: #1b1b1b;
+    font-size: 1.35rem;
+    font-weight: 800;
+    margin-bottom: 0.4rem;
+  }
+
+  .info-card p {
+    color: rgba(34, 34, 34, 0.82);
+  }
+
+  .info-link,
+  .inline-link {
+    color: #7f5105;
+    text-decoration: underline;
+    text-decoration-thickness: 1.5px;
+    text-underline-offset: 2px;
+  }
+
+  .info-link {
+    display: inline-block;
+    margin-top: 0.75rem;
+    font-weight: 700;
+  }
+
+  @media (min-width: 768px) {
+    .revy-hero {
+      padding: 2.4rem 2.6rem;
+    }
+
+    .info-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .show-card--day {
+      padding: 1.35rem 1.45rem;
+    }
+  }
+</style>
