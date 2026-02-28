@@ -27,6 +27,8 @@ const program = defineCollection({
           title: z.string(),
           location: z.string().optional(),
           description: z.string().optional(),
+          banner: z.string().optional(),
+          poster: z.string().optional(),
         }),
       )
       .optional(),

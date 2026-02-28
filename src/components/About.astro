@@ -22,26 +22,27 @@ const {
 } = Astro.props as Props;
 ---
 
-<section class="w-full bg-[#fdbc5b]">
-  <div class="max-w-6xl px-6 py-12 mx-auto lg:py-16">
-    <div class="grid items-start gap-10 lg:grid-cols-2">
+<section class="w-full bg-[#eadfd0]">
+  <div class="max-w-6xl px-6 py-14 mx-auto lg:py-20">
+    <div class="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
       <div>
-        <h2 class="text-4xl font-extrabold tracking-tight text-neutral-900 sm:text-5xl">{title}</h2>
-        <div class="mt-6 space-y-5 text-neutral-700 leading-relaxed text-[0.98rem] sm:text-base">
+        <span class="inline-flex items-center rounded-full bg-[#81c997] px-4 py-1.5 text-xs font-bold uppercase tracking-[0.2em] text-[#1b1b1b] shadow-sm">Studentfestivalen</span>
+        <h2 class="mt-4 text-4xl font-extrabold tracking-tight text-neutral-900 sm:text-5xl">{title}</h2>
+        <div class="mt-6 space-y-5 text-neutral-600 leading-relaxed text-[0.98rem] sm:text-base">
           {paragraphs.map((p) => <p>{p}</p>)}
         </div>
       </div>
       <div class="grid gap-4">
-        <figure class="relative overflow-hidden shadow-md aspect-video rounded-2xl" data-img-wrapper>
+        <figure class="relative overflow-hidden shadow-lg aspect-video rounded-2xl ring-1 ring-black/5" data-img-wrapper>
           <div class="absolute inset-0 skeleton"></div>
           <CldImage draggable="false" src={heroImg} alt="Festivalstemning blant studenter" class="object-cover w-full h-full transition-opacity duration-300" sizes="(min-width: 1024px) 50vw, 100vw" loading="lazy" fetchpriority="low" onload="this.style.opacity=''; this.closest('[data-img-wrapper]')?.setAttribute('data-loaded','true');" />
         </figure>
         <div class="grid grid-cols-2 gap-4">
-          <figure class="relative overflow-hidden shadow-md aspect-4/3 rounded-2xl" data-img-wrapper>
+          <figure class="relative overflow-hidden shadow-lg aspect-4/3 rounded-2xl ring-1 ring-black/5" data-img-wrapper>
             <div class="absolute inset-0 skeleton"></div>
             <CldImage draggable="false" src={img2} alt="Kveld i Ålesund" class="object-cover w-full h-full transition-opacity duration-300" sizes="(min-width: 1024px) 25vw, 50vw" loading="lazy" fetchpriority="low" onload="this.style.opacity=''; this.closest('[data-img-wrapper]')?.setAttribute('data-loaded','true');" />
           </figure>
-          <figure class="relative overflow-hidden shadow-md aspect-4/3 rounded-2xl" data-img-wrapper>
+          <figure class="relative overflow-hidden shadow-lg aspect-4/3 rounded-2xl ring-1 ring-black/5" data-img-wrapper>
             <div class="absolute inset-0 skeleton"></div>
             <CldImage draggable="false" src={img3} alt="Studentfellesskap i byen" class="object-cover w-full h-full transition-opacity duration-300" sizes="(min-width: 1024px) 25vw, 50vw" loading="lazy" fetchpriority="low" onload="this.style.opacity=''; this.closest('[data-img-wrapper]')?.setAttribute('data-loaded','true');" />
           </figure>

@@ -1,28 +1,91 @@
 ---
 import { Icon } from "astro-icon/components";
+
 const year = new Date().getFullYear();
+
+const navLinks = [
+  { name: "Forside", href: "/" },
+  { name: "Program", href: "/program" },
+  { name: "Revyen", href: "/revy" },
+];
 ---
 
 <footer class="relative overflow-hidden text-neutral-900 mt-auto bg-[#fdbc5b]">
-  <div
-    aria-hidden
-    class="absolute inset-x-0 top-0 h-[3px] bg-gradient-to-r from-transparent via-[var(--uka-yellow)] to-transparent shadow-[0_0_14px_rgba(253,188,91,0.65)]"
-  ></div>
-  <div class="mx-auto w-full max-w-6xl px-6 pt-10 pb-[calc(2.5rem+env(safe-area-inset-bottom))]">
-    <div class="flex flex-col items-center justify-between gap-6 sm:flex-row">
-      <div class="text-center sm:text-left">
-        <p class="text-sm/6 text-neutral-900">© {year} Ålesund Studentsamfunn</p>
-        <p class="text-sm/6 text-neutral-700">Av studenter - for alle.</p>
+  <!-- Dot grid texture -->
+  <div class="footer-dot-bg absolute inset-0 pointer-events-none" aria-hidden="true"></div>
+  <!-- Decorative blobs -->
+  <div class="absolute -top-12 -right-12 h-48 w-48 rounded-full bg-[#f26f7a]/20 blur-3xl pointer-events-none" aria-hidden="true"></div>
+  <div class="absolute -bottom-8 -left-8 h-36 w-36 rounded-full bg-[#81c997]/25 blur-3xl pointer-events-none" aria-hidden="true"></div>
+
+  <div class="relative mx-auto w-full max-w-6xl px-6 pt-12 pb-[calc(2rem+env(safe-area-inset-bottom))]">
+
+    <!-- Main grid: brand / nav / contact -->
+    <div class="grid gap-10 sm:grid-cols-3 sm:gap-8 pb-10 border-b border-[#1b1b1b]/15">
+
+      <!-- Brand -->
+      <div>
+        <p class="text-xl font-extrabold tracking-[0.02em] logo-wordmark leading-none">U.-KA.</p>
+        <p class="mt-3 text-sm text-neutral-700 leading-relaxed">
+          Studentfestivalen i Ålesund.<br />
+          Av studenter – for alle.
+        </p>
       </div>
-      <nav class="flex items-center gap-5 text-sm">
-        <a href="mailto:ukaa@astudent.no" class="inline-flex items-center gap-2 rounded-full border border-neutral-900/15 bg-white/75 px-4 py-2 text-neutral-900 shadow-[inset_0_1px_0_rgba(255,255,255,0.8)] backdrop-blur-md transition hover:bg-white">Kontakt</a>
-        <a href="https://www.facebook.com/ukaialesund/" target="_blank" aria-label="Facebook" class="grid h-10 w-10 place-items-center rounded-full border border-neutral-900/15 bg-white/75 text-neutral-900 shadow-[inset_0_1px_0_rgba(255,255,255,0.8)] backdrop-blur-md transition hover:bg-white">
-          <Icon name="mdi:facebook" class="h-5 w-5" />
+
+      <!-- Navigation -->
+      <div>
+        <p class="mb-4 text-[0.65rem] font-bold uppercase tracking-[0.2em] text-[#1b1b1b]/55">Navigasjon</p>
+        <ul class="space-y-2.5">
+          {navLinks.map((l) => (
+            <li>
+              <a href={l.href} class="text-sm font-medium text-neutral-900 transition-opacity hover:opacity-60">
+                {l.name}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <!-- Contact + socials -->
+      <div>
+        <p class="mb-4 text-[0.65rem] font-bold uppercase tracking-[0.2em] text-[#1b1b1b]/55">Kontakt</p>
+        <a
+          href="mailto:ukaa@astudent.no"
+          class="text-sm font-medium text-neutral-900 transition-opacity hover:opacity-60"
+        >
+          ukaa@astudent.no
         </a>
-        <a href="https://www.instagram.com/ukaialesund/" target="_blank" aria-label="Instagram" class="grid h-10 w-10 place-items-center rounded-full border border-neutral-900/15 bg-white/75 text-neutral-900 shadow-[inset_0_1px_0_rgba(255,255,255,0.8)] backdrop-blur-md transition hover:bg-white">
-          <Icon name="mdi:instagram" class="h-5 w-5" />
-        </a>
-      </nav>
+        <div class="mt-5 flex items-center gap-2.5">
+          <a
+            href="https://www.facebook.com/ukaialesund/"
+            target="_blank"
+            aria-label="Facebook"
+            class="grid h-9 w-9 place-items-center rounded-full bg-[#1b1b1b] text-white shadow-sm transition hover:opacity-75"
+          >
+            <Icon name="mdi:facebook" class="h-5 w-5" />
+          </a>
+          <a
+            href="https://www.instagram.com/ukaialesund/"
+            target="_blank"
+            aria-label="Instagram"
+            class="grid h-9 w-9 place-items-center rounded-full bg-[#1b1b1b] text-white shadow-sm transition hover:opacity-75"
+          >
+            <Icon name="mdi:instagram" class="h-5 w-5" />
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Copyright row -->
+    <div class="pt-6 flex items-center justify-between gap-4 flex-wrap">
+      <p class="text-sm text-neutral-700">© {year} Ålesund Studentsamfunn</p>
+      <p class="text-sm text-[#1b1b1b]/50">Av studenter – for alle.</p>
     </div>
   </div>
 </footer>
+
+<style>
+  .footer-dot-bg {
+    background-image: radial-gradient(circle, rgba(27, 27, 27, 0.08) 1.5px, transparent 1.5px);
+    background-size: 26px 26px;
+  }
+</style>

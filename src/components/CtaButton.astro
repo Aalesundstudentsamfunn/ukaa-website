@@ -1,6 +1,5 @@
 ---
 import ExternalLink from "../assets/images/external-link.svg";
-import Button from "./ui/Button.astro";
 
 export interface Props {
   label: string;
@@ -8,32 +7,48 @@ export interface Props {
   disabled?: boolean;
   class?: string;
   newTab?: boolean;
+  variant?: "default" | "tikkio";
 }
 
-const { label, href, disabled = false, class: cls = "", newTab = false } = Astro.props as Props;
+const { label, href, disabled = false, class: cls = "", newTab = false, variant = "default" } = Astro.props as Props;
 
 const targetProps = newTab ? { target: "_blank", rel: "noreferrer noopener" } : {};
 
 const base =
-  "cta-btn rounded-full px-6 py-2.5 text-[0.98rem] font-bold leading-none text-[#20180d] border border-[#b98f46]/55 " +
-  "inline-flex items-center gap-2.5 transition-[transform,box-shadow,border-color,filter] duration-200";
-const enabled =
-  "bg-[linear-gradient(120deg,#fdbc5b_0%,#f6cb73_46%,#f26f7a_100%)] shadow-[0_6px_16px_rgba(210,145,40,0.2)] " +
-  "hover:-translate-y-px hover:shadow-[0_10px_20px_rgba(210,145,40,0.24)] hover:border-[#ad7c2e]/65 active:translate-y-0";
+  "cta-btn rounded-full px-6 py-2.5 text-[0.98rem] font-bold leading-none " +
+  "inline-flex items-center gap-2.5 transition-all duration-200 " +
+  "focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50";
+
+const variants = {
+  default:
+    "bg-white text-[#1b1b1b] shadow-[0_3px_12px_rgba(0,0,0,0.12)] " +
+    "hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(0,0,0,0.18)] " +
+    "active:translate-y-0 active:bg-neutral-50",
+  tikkio:
+    "bg-[#1b1b1b] text-white shadow-[0_3px_14px_rgba(27,27,27,0.22)] " +
+    "hover:-translate-y-0.5 hover:bg-[#2d2d2d] hover:shadow-[0_8px_28px_rgba(27,27,27,0.28)] " +
+    "active:translate-y-0 active:bg-[#111]",
+};
+
+const enabled = variants[variant] ?? variants.default;
 const disabledCls =
-  "bg-gradient-to-r from-neutral-300 to-neutral-400 opacity-60 cursor-not-allowed inline-flex items-center gap-2.5 border-neutral-400";
+  "bg-neutral-300 text-neutral-500 opacity-60 cursor-not-allowed";
 ---
 
 {
   !disabled && href ? (
-    <Button href={href} class={`${base} ${enabled} ${cls}`} {...targetProps}>
+    <a href={href} class={`${base} ${enabled} ${cls}`} {...targetProps}>
       <span>{label}</span>
-      <ExternalLink class="h-4 w-4 opacity-90" />
-    </Button>
+      <ExternalLink class="h-4 w-4 opacity-70" />
+    </a>
   ) : (
-    <Button class={`${base} ${disabled ? disabledCls : enabled} ${cls}`} disabled={disabled}>
+    <button
+      type="button"
+      disabled={disabled}
+      class={`${base} ${disabled ? disabledCls : enabled} ${cls}`}
+    >
       <span>{label}</span>
-      {!disabled && <ExternalLink class="h-4 w-4 opacity-90" />}
-    </Button>
+      {!disabled && <ExternalLink class="h-4 w-4 opacity-70" />}
+    </button>
   )
 }

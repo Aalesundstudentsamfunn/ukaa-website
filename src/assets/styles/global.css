@@ -100,9 +100,6 @@ body::-webkit-scrollbar {
 }
 
 /* Small global utilities shared across components */
-.animate-aurora {
-  animation: aurora 12s ease-in-out infinite;
-}
 .rounded-inherit {
   border-radius: inherit;
 }
