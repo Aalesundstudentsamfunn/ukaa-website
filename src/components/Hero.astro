@@ -1,37 +1,52 @@
 ---
 import { MuxPlayer } from "@mux/mux-player-astro";
 import VideoButton from "./VideoButton.astro";
-import TitleSvg from "../assets/images/skiogmagi_full.svg";
-import { CldImage } from "astro-cloudinary";
+import TitleSvg from "../assets/images/logo-nav.svg";
+import tempHero from "../assets/images/temp-hero.jpg";
 import { getEntry } from "astro:content";
 
 const heroEntry = await getEntry("hero", "index");
 const { titleAriaLabel, subtitle, ctaLabel } = heroEntry.data;
 ---
 
-<div id="container" class="relative flex max-h-dvh" style="font-family: Inter, Roboto, 'Helvetica Neue', 'Arial Nova', 'Nimbus Sans', Arial, sans-serif;">
-  <!-- Video -->
-  <MuxPlayer id="bgPlayer" playbackId="oH900N4ZEOj7xTzGaw6lmBHQ3P9Da9MhaP8nb400R00gWU" primaryColor="#155dfc" thumbnailTime={0} hotkeys="noc nok nom nof noarrowleft noarrowright" preload="none" class="absolute left-0 right-0 h-full w-full pointer-events-auto z-1" />
-
+<div id="container" class="relative flex max-h-dvh">
   <div class="absolute inset-0 skeleton z-8"></div>
-  <CldImage src="cover-min_oxufkc_azdl5p" version="1763807656" id="hero" alt="bilde av studenter ute i en snøbakke" aria-hidden="true" class="absolute left-0 right-0 h-full object-cover w-full transition-opacity duration-300 poster z-6" sizes="100vw" loading="eager" decoding="async" fetchpriority="high" draggable="false" onload="this.style.opacity=''; this.parentElement?.setAttribute('data-loaded','true');" />
+  <img src={tempHero.src} width={tempHero.width} height={tempHero.height} id="hero" alt="Stemning med studenter i Ålesund" aria-hidden="true" class="poster absolute left-0 right-0 h-full w-full object-cover transition-opacity duration-300 z-6" loading="eager" decoding="async" fetchpriority="high" draggable="false" onload="this.style.opacity=''; this.parentElement?.setAttribute('data-loaded','true');" />
 
-  <!-- Dark overlay while paused (non-interactive) -->
-  <div aria-hidden="true" class="absolute inset-0 opacity-100 pause-overlay z-7 bg-black/45 pointer-events-none"></div>
+  <!-- Video -->
+  <MuxPlayer id="bgPlayer" playbackId="w1zMKdwvqoaSWGN5NPvFsNdf5btWCM5QXet3OYhJCGs" primaryColor="#fdbc5b" thumbnailTime={0} hotkeys="noc nok nom nof noarrowleft noarrowright" preload="none" class="absolute left-0 right-0 h-full w-full pointer-events-auto z-1" />
+
+  <!-- Dark overlay for legibility -->
+  <div aria-hidden="true" class="pause-overlay absolute inset-0 z-7 bg-black/45 pointer-events-none"></div>
+
+  <!-- UKA waves -->
+  <div aria-hidden="true" class="hero-waves absolute inset-x-0 bottom-[-1px] z-8 h-[22%] sm:h-[28%] pointer-events-none translate-y-[1px]">
+    <svg viewBox="0 0 1440 320" preserveAspectRatio="none" class="absolute inset-0 h-full w-full opacity-55">
+      <path fill="#fdbc5b" d="M0,40C140,80,260,185,400,140C540,100,680,150,840,165C1000,180,1160,210,1280,238C1360,252,1405,265,1440,252L1440,320L0,320Z"></path>
+    </svg>
+    <svg viewBox="0 0 1440 320" preserveAspectRatio="none" class="absolute inset-0 h-full w-full">
+      <path fill="#fdbc5b" d="M0,65C160,105,300,195,440,170C580,145,720,190,880,178C1040,166,1200,215,1320,238C1380,250,1415,262,1440,248L1440,320L0,320Z"></path>
+    </svg>
+    <svg viewBox="0 0 1440 320" preserveAspectRatio="none" class="absolute inset-0 h-full w-full opacity-85">
+      <path fill="#fdbc5b" d="M0,90C180,130,340,210,500,190C660,170,820,200,980,192C1140,184,1300,225,1440,225L1440,320L0,320Z"></path>
+    </svg>
+    <svg viewBox="0 0 1440 320" preserveAspectRatio="none" class="absolute inset-0 h-full w-full opacity-95">
+      <path fill="#fdbc5b" d="M0,115C200,160,380,230,560,215C740,200,920,220,1100,215C1280,210,1385,222,1440,214L1440,320L0,320Z"></path>
+    </svg>
+  </div>
 
   <!-- HERO -->
   <section class="hero-overlay relative z-10 flex flex-col items-center min-w-screen min-h-dvh gap-4 px-8 align-middle justify-center text-center">
-    <TitleSvg aria-label={titleAriaLabel} class="hero-tit w-[20%] min-w-[170px] drop-shadow-[0_2px_12px_rgba(0,0,0,0.35)] transition-all duration-300 group-[.is-playing]:opacity-0 group-[.is-playing]:translate-y-2" />
+    <TitleSvg aria-label={titleAriaLabel} class="hero-tit w-[20%] min-w-[170px] drop-shadow-[0_2px_12px_rgba(0,0,0,0.35)] transition-all duration-300" />
 
     <h2 class="hero-sub mt-5 uppercase text-white/95 font-medium text-[clamp(1.75rem,4vw,2.25rem)]">{subtitle}</h2>
-
-    <div class="inline-flex gap-3 sm:gap-2 z-50 pointer-events-auto">
-      <VideoButton icon="mdi:play" label={ctaLabel} action="play" class="btn-play" />
+    <div class="mt-4 flex items-center gap-3">
+      <VideoButton icon="mdi:play" label={ctaLabel} action="play" class="btn-play pointer-events-auto" size="lg" />
     </div>
-  </section>
 
-  <!-- Pause button -->
-  <VideoButton icon="mdi:pause" action="pause" class="btn-pause absolute right-10 top-30 z-15" />
+    <!-- Pause button -->
+    <VideoButton icon="mdi:pause" action="pause" class="btn-pause absolute right-10 top-30 z-15" />
+  </section>
 </div>
 
 <script is:inline>
@@ -41,8 +56,50 @@ const { titleAriaLabel, subtitle, ctaLabel } = heroEntry.data;
     } catch {}
     const container = document.getElementById("container");
     const player = document.getElementById("bgPlayer");
+    const body = document.body;
+    const navHiddenClass = "hero-nav-hidden";
+    const idleDelayMs = 2400;
+    let idleTimer;
+    let watchingActivity = false;
     let hasPlayed = false;
     container?.classList.remove("is-playing", "has-played");
+    body?.classList.remove("hero-video-playing");
+    body?.classList.remove(navHiddenClass);
+
+    const onUserActivity = () => {
+      if (!container?.classList.contains("is-playing")) return;
+      body?.classList.remove(navHiddenClass);
+      if (idleTimer) window.clearTimeout(idleTimer);
+      idleTimer = window.setTimeout(() => {
+        if (container?.classList.contains("is-playing")) {
+          body?.classList.add(navHiddenClass);
+        }
+      }, idleDelayMs);
+    };
+
+    const startNavAutoHide = () => {
+      if (watchingActivity) return;
+      watchingActivity = true;
+      document.addEventListener("pointermove", onUserActivity, { passive: true });
+      document.addEventListener("mousemove", onUserActivity, { passive: true });
+      document.addEventListener("touchstart", onUserActivity, { passive: true });
+      document.addEventListener("keydown", onUserActivity);
+      onUserActivity();
+    };
+
+    const stopNavAutoHide = () => {
+      if (!watchingActivity) return;
+      watchingActivity = false;
+      if (idleTimer) {
+        window.clearTimeout(idleTimer);
+        idleTimer = undefined;
+      }
+      body?.classList.remove(navHiddenClass);
+      document.removeEventListener("pointermove", onUserActivity);
+      document.removeEventListener("mousemove", onUserActivity);
+      document.removeEventListener("touchstart", onUserActivity);
+      document.removeEventListener("keydown", onUserActivity);
+    };
 
     container?.addEventListener("click", (e) => {
       const el = e.target;
@@ -50,30 +107,34 @@ const { titleAriaLabel, subtitle, ctaLabel } = heroEntry.data;
       const btn = el.closest("[data-video-action]");
       if (!btn || !player) return;
       const action = btn.getAttribute("data-video-action");
-      console.log("[Hero] button pressed:", action);
       if (action === "play") {
-        container?.classList.add("is-playing");
         player.play();
       } else if (action === "pause") {
         player.pause();
         container?.classList.remove("is-playing");
+        body?.classList.remove("hero-video-playing");
       } else if (action === "toggle") {
         if (player.paused) {
-          container?.classList.add("is-playing");
           player.play();
         } else {
           player.pause();
           container?.classList.remove("is-playing");
+          body?.classList.remove("hero-video-playing");
         }
       }
     });
 
     const setPlaying = (is) => {
       container?.classList.toggle("is-playing", !!is);
+      body?.classList.toggle("hero-video-playing", !!is);
+      if (is) {
+        startNavAutoHide();
+      } else {
+        stopNavAutoHide();
+      }
     };
 
     player?.addEventListener("play", () => {
-      console.log("[Hero] player: play");
       setPlaying(true);
       if (!hasPlayed) {
         hasPlayed = true;
@@ -94,21 +155,37 @@ const { titleAriaLabel, subtitle, ctaLabel } = heroEntry.data;
   .pause-overlay,
   .hero-sub,
   .hero-tit,
-  .btn-play,
-  .btn-pause {
+  .hero-waves,
+  .btn-play {
     transition:
-      opacity 700ms ease,
+      opacity 1200ms ease,
       transform 200ms ease;
   }
 
+  .btn-pause {
+    transition:
+      opacity 380ms ease,
+      transform 180ms ease;
+  }
+
   .poster {
-    transition: all 4s ease;
+    transition: opacity 2200ms ease;
   }
 
   /* hide poster as soon as playing starts */
   #container.is-playing .poster {
     opacity: 0;
     pointer-events: none;
+  }
+
+  #bgPlayer {
+    opacity: 0;
+    transition: opacity 1800ms ease;
+  }
+
+  #container.has-played #bgPlayer,
+  #container.is-playing #bgPlayer {
+    opacity: 1;
   }
 
   /* initial states */
@@ -131,6 +208,11 @@ const { titleAriaLabel, subtitle, ctaLabel } = heroEntry.data;
     opacity: 0;
     transform: translateY(0.5rem);
   }
+  #container.is-playing .hero-waves {
+    opacity: 0;
+    transform: translateY(1rem);
+    pointer-events: none;
+  }
 
   /* These two are in a CHILD component, so use :global (this whole block is global) */
   #container.is-playing .btn-play {
@@ -142,6 +224,14 @@ const { titleAriaLabel, subtitle, ctaLabel } = heroEntry.data;
     opacity: 1;
     transform: translateY(0);
     pointer-events: auto;
+  }
+
+  /* Hide pause control together with navbar when cursor/input is idle during playback */
+  body.hero-video-playing.hero-nav-hidden #container.is-playing .btn-pause {
+    opacity: 0;
+    transform: translateY(-0.25rem);
+    pointer-events: none;
+    transition-duration: 180ms, 160ms;
   }
 
   /* once user played at least once, permanently hide poster & cover grad */

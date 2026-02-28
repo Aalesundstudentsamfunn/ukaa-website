@@ -1,6 +1,5 @@
 ---
 import ExternalLink from "../assets/images/external-link.svg";
-import Button from "./ui/Button.astro";
 
 export interface Props {
   label: string;
@@ -8,29 +7,48 @@ export interface Props {
   disabled?: boolean;
   class?: string;
   newTab?: boolean;
+  variant?: "default" | "tikkio";
 }
 
-const { label, href, disabled = false, class: cls = "", newTab = false } = Astro.props as Props;
+const { label, href, disabled = false, class: cls = "", newTab = false, variant = "default" } = Astro.props as Props;
 
 const targetProps = newTab ? { target: "_blank", rel: "noreferrer noopener" } : {};
 
-const base = "cta-btn rounded-full px-7 py-3 text-white";
-const enabled = "bg-gradient-to-r from-indigo-500 to-fuchsia-600 shadow-[0_10px_30px_rgba(99,102,241,0.25)] hover:-translate-y-0.5 active:translate-y-0 inline-flex items-center gap-2";
-const disabledCls = "bg-gradient-to-r from-neutral-400 to-neutral-500 opacity-60 cursor-not-allowed inline-flex items-center gap-2";
+const base =
+  "cta-btn rounded-full px-6 py-2.5 text-[0.98rem] font-bold leading-none " +
+  "inline-flex items-center gap-2.5 transition-all duration-200 " +
+  "focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50";
+
+const variants = {
+  default:
+    "bg-white text-[#1b1b1b] shadow-[0_3px_12px_rgba(0,0,0,0.12)] " +
+    "hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(0,0,0,0.18)] " +
+    "active:translate-y-0 active:bg-neutral-50",
+  tikkio:
+    "bg-[#1b1b1b] text-white shadow-[0_3px_14px_rgba(27,27,27,0.22)] " +
+    "hover:-translate-y-0.5 hover:bg-[#2d2d2d] hover:shadow-[0_8px_28px_rgba(27,27,27,0.28)] " +
+    "active:translate-y-0 active:bg-[#111]",
+};
+
+const enabled = variants[variant] ?? variants.default;
+const disabledCls =
+  "bg-neutral-300 text-neutral-500 opacity-60 cursor-not-allowed";
 ---
 
 {
   !disabled && href ? (
-    <Button href={href} class={`${base} ${enabled} ${cls}`} {...targetProps}>
+    <a href={href} class={`${base} ${enabled} ${cls}`} {...targetProps}>
       <span>{label}</span>
-      <ExternalLink class="w-5 h-5 opacity-90" />
-      <span class="pointer-events-none shine" />
-    </Button>
+      <ExternalLink class="h-4 w-4 opacity-70" />
+    </a>
   ) : (
-    <Button class={`${base} ${disabled ? disabledCls : enabled} ${cls}`} disabled={disabled}>
+    <button
+      type="button"
+      disabled={disabled}
+      class={`${base} ${disabled ? disabledCls : enabled} ${cls}`}
+    >
       <span>{label}</span>
-      {!disabled && <ExternalLink class="w-5 h-5 opacity-90" />}
-      {!disabled && <span class="pointer-events-none shine" />}
-    </Button>
+      {!disabled && <ExternalLink class="h-4 w-4 opacity-70" />}
+    </button>
   )
 }

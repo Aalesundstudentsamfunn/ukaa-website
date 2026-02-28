@@ -1,20 +1,21 @@
 ---
 import SiteMeta from "../components/SiteMeta.astro";
 import Navigation from "../components/Navigation.astro";
-import MagicBackground from "../components/ui/MagicBackground.astro";
 import "../assets/styles/global.css";
 
-const { title = "Ski & Magi", description = "Vintermagi." } = Astro.props;
+const {
+  title = "U.-KA.",
+  description = "U.-KA. er Ålesunds studentfestival med konserter, show, foredrag og sosiale arrangementer gjennom uka.",
+} = Astro.props;
 ---
 
 <html lang="en" data-theme="cerberus">
   <head>
     <SiteMeta title={title} description={description} />
   </head>
-  <body class="text-neutral-900 bg-neutral-100">
+  <body class="text-neutral-900">
     <Navigation />
-    <main class="relative isolate overflow-hidden min-h-svh flex flex-col">
-      <MagicBackground sparkles={false} />
+    <main class="relative isolate min-h-svh flex flex-col">
       <slot />
     </main>
   </body>

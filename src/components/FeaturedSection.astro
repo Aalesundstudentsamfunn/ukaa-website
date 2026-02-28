@@ -1,0 +1,57 @@
+---
+import FeaturedCard from "./FeaturedCard.astro";
+import FeaturedModal from "./FeaturedModal.astro";
+import { events, type EventItem } from "../data/events";
+
+export interface Props {
+  heading?: string;
+  subheading?: string;
+  items?: EventItem[];
+}
+
+const {
+  heading = "Utvalgt fra U.-KA.",
+  subheading = "Et utvalg høydepunkter fra studentfestivalen i Ålesund.",
+  items = events,
+} = Astro.props as Props;
+---
+
+<section class="w-full bg-[#f7ecd8]">
+  <div class="max-w-6xl px-6 mx-auto py-14 lg:py-20">
+    <div class="mb-12 text-center">
+      <span class="inline-flex items-center rounded-full bg-[#fdbc5b] px-4 py-1.5 text-xs font-bold uppercase tracking-[0.2em] text-[#1b1b1b] shadow-sm">Studentfestival</span>
+      <h2 class="mt-4 text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-[2.75rem] text-neutral-900">
+        {heading}
+      </h2>
+      <p class="mx-auto mt-3 max-w-xl text-neutral-500 text-[0.95rem] leading-relaxed">{subheading}</p>
+    </div>
+
+    <div class="grid gap-6 sm:gap-7 lg:grid-cols-3">
+      {items.map((m) => <FeaturedCard {...m} />)}
+    </div>
+  </div>
+
+  {items.map((m) => <FeaturedModal {...m} />)}
+</section>
+
+<script is:inline>
+  const openModal = (dlg) => {
+    try {
+      dlg.showModal?.();
+    } catch {
+      dlg.setAttribute("open", "");
+    }
+  };
+
+  document.addEventListener("click", (e) => {
+    const el = e.target;
+    if (!(el instanceof Element)) return;
+    const opener = el.closest("[data-open][data-target]");
+    if (!opener) return;
+    e.preventDefault();
+    e.stopPropagation();
+    const id = opener.getAttribute("data-target");
+    const dlg = id && document.getElementById(id);
+    if (dlg instanceof HTMLDialogElement || dlg instanceof HTMLElement) openModal(dlg);
+  });
+</script>

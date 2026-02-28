@@ -1,0 +1,573 @@
+---
+import PageLayout from "../layouts/PageLayout.astro";
+import Footer from "../components/Footer.astro";
+
+type RevyShow = {
+  title: string;
+  day: string;
+  date: string;
+  time: string;
+  location: string;
+  description: string;
+  banner?: string;
+  ticketUrl?: string;
+};
+
+const pageTitle = "Revyen";
+const dateRange = "13.–14. mars 2026";
+const description =
+  "U.-KA.-Revyen er sceneshowet under U.-KA. med humor, musikk og studentliv i fokus.";
+const ticketHref = "https://tikkio.com/organizer/2624-ass-alesund-studentsamfunn";
+
+const cloudName = import.meta.env.PUBLIC_CLOUDINARY_CLOUD_NAME;
+const cloudUrl = (id: string, w = 800) =>
+  `https://res.cloudinary.com/${cloudName}/image/upload/f_auto,q_auto,w_${w}/${id}`;
+const revyShowImage = "/images/revy-poster-temp.png";
+const resolveImageUrl = (src?: string, w = 800) => {
+  if (!src) return "";
+  return src.startsWith("/") ? src : cloudUrl(src, w);
+};
+
+const revyShows: RevyShow[] = [
+  {
+    title: "U.-KA. Revyen",
+    day: "Torsdag",
+    date: "12. mars",
+    time: "18:00",
+    location: "Parken Kulturhus",
+    description: "Første forestilling fredag kveld.",
+    banner: revyShowImage,
+    ticketUrl: "https://tikkio.com/events/62367-u-ka-revyen-torsdag-12-mars-2026-1800",
+  },
+  {
+    title: "U.-KA. Revyen",
+    day: "Torsdag",
+    date: "12. mars",
+    time: "21:00",
+    location: "Parken Kulturhus",
+    description: "Senforestilling med fullt revytrykk.",
+    banner: revyShowImage,
+    ticketUrl: "https://tikkio.com/events/62373-u-ka-revyen-torsdag-12-mars-2026-1800",
+  },
+  {
+    title: "U.-KA. Revyen",
+    day: "Fredag",
+    date: "13. mars",
+    time: "18:00",
+    location: "Parken Kulturhus",
+    description: "Ekstraforestilling lørdag kveld.",
+    banner: revyShowImage,
+    ticketUrl: "https://tikkio.com/events/62374-u-ka-revyen-torsdag-12-mars-2026-1800",
+  },
+];
+
+const showCountLabel =
+  revyShows.length === 1 ? "1 forestilling" : `${revyShows.length} forestillinger`;
+---
+
+<PageLayout title={pageTitle} description={description}>
+  <div class="revy-page">
+    <section class="relative mt-20 sm:mt-24">
+      <div class="mx-auto max-w-6xl px-6 pt-10 sm:pt-14">
+        <div class="relative overflow-hidden rounded-3xl bg-[#fdbc5b]">
+          <div class="hero-dot-bg absolute inset-0 pointer-events-none" aria-hidden="true"></div>
+          <div class="absolute -top-20 -right-20 h-72 w-72 rounded-full bg-[#f26f7a]/25 blur-3xl pointer-events-none" aria-hidden="true"></div>
+          <div class="absolute -bottom-16 -left-16 h-56 w-56 rounded-full bg-[#81c997]/30 blur-3xl pointer-events-none" aria-hidden="true"></div>
+          <div class="pointer-events-none absolute inset-3 rounded-2xl border border-white/25" aria-hidden="true"></div>
+          <div class="hero-photo-panel absolute right-0 top-0 bottom-0 w-[44%] hidden lg:block" aria-hidden="true">
+            <img src={cloudUrl("skiogmagi_2025_10_hmvmyn", 1000)} alt="" class="w-full h-full object-cover" loading="eager" />
+            <div class="absolute inset-0" style="background: linear-gradient(to right, #fdbc5b 0%, transparent 30%)"></div>
+            <div class="absolute inset-0" style="background: linear-gradient(to top, #fdbc5b 0%, transparent 20%)"></div>
+          </div>
+          <div class="relative px-8 py-14 sm:px-12 sm:py-20 lg:max-w-[58%]">
+            <span class="inline-flex items-center rounded-full bg-[#1b1b1b] px-4 py-1.5 text-xs font-bold uppercase tracking-[0.2em] text-white shadow-sm">U.-KA. 2026</span>
+            <h1 class="mt-4 text-5xl font-extrabold tracking-tight text-[#1b1b1b] leading-[1.05] sm:text-6xl">U.-KA.-Revyen</h1>
+            <p class="mt-3 text-lg font-semibold text-[#1b1b1b]/70">{dateRange}</p>
+            <p class="mt-3 max-w-md text-[#1b1b1b]/60 leading-relaxed text-[0.95rem]">{description}</p>
+            <div class="mt-6 flex flex-wrap gap-3">
+              <a href={ticketHref} target="_blank" rel="noreferrer" class="hero-pill hero-pill--solid">Kjøp billetter</a>
+              <a href="#praktisk" class="hero-pill hero-pill--ghost">Se video</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="mx-auto max-w-6xl px-6 pb-20 pt-10">
+      <section class="revy-section">
+        <div class="day-header">
+          <div>
+            <p class="day-header__label">Forestillinger</p>
+            <h2 class="day-header__date">Revyprogram</h2>
+            <p class="day-header__summary">Sketsjer, musikk og studenthumor på scenen i Parken Kulturhus.</p>
+          </div>
+          <span class="day-count">{showCountLabel}</span>
+        </div>
+
+        {revyShows.length > 0 ? (
+          <div class="day-grid">
+            {revyShows.map((show) => (
+              <article class="event-card" style="--event-accent: #fdbc5b;">
+                <a
+                  href={show.ticketUrl || ticketHref}
+                  target="_blank"
+                  rel="noreferrer"
+                  class="event-card__open"
+                  aria-label={`Kjøp billetter til ${show.title} ${show.date} kl. ${show.time}`}
+                ></a>
+                <div class="event-card__open-indicator" aria-hidden="true">
+                  <div class="event-card__open-indicator-inner">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-3.5 w-3.5 text-white">
+                      <path fill-rule="evenodd" d="M5.22 14.78a.75.75 0 0 0 1.06 0l7.22-7.22v5.69a.75.75 0 0 0 1.5 0v-7.5a.75.75 0 0 0-.75-.75h-7.5a.75.75 0 0 0 0 1.5h5.69l-7.22 7.22a.75.75 0 0 0 0 1.06Z" clip-rule="evenodd" />
+                    </svg>
+                  </div>
+                </div>
+                {show.banner && (
+                  <div class="event-card__banner">
+                    <img src={resolveImageUrl(show.banner, 700)} alt="" loading="lazy" draggable="false" />
+                    <div class="event-card__banner-overlay"></div>
+                  </div>
+                )}
+                <div class="event-card__bar"></div>
+                <div class="event-card__body">
+                  <div class="event-card__row">
+                    <span class="event-card__date">{show.day} · {show.date}</span>
+                    <span class="event-time">{show.time}</span>
+                  </div>
+                  <h3 class="event-card__title">{show.title}</h3>
+                  <p class="event-card__desc">{show.description}</p>
+                  <div class="event-card__meta">
+                    <span class="event-meta-pill">{show.location}</span>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+        ) : (
+          <p class="day-empty">Forestillingsdatoer kommer snart.</p>
+        )}
+      </section>
+
+      <section id="praktisk" class="info-section">
+        <div class="day-header">
+          <div>
+            <p class="day-header__label">Praktisk</p>
+            <h2 class="day-header__date">Om Revyen</h2>
+          </div>
+        </div>
+
+        <article id="revy-video" class="video-card">
+          <h3>Se fjorårets show</h3>
+          <p>Her er et opptak fra U.-KA.-Revyen i fjor.</p>
+          <div class="video-embed-wrap">
+            <iframe
+              src="https://www.youtube.com/embed/jQb8wMhtyXY"
+              title="U.-KA.-Revyen fra i fjor"
+              loading="lazy"
+              referrerpolicy="strict-origin-when-cross-origin"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen
+            ></iframe>
+          </div>
+        </article>
+
+        <div class="info-grid">
+          <article class="info-card">
+            <h3>Hva er U.-KA.-Revyen?</h3>
+            <p>
+              Et studentdrevet sceneshow med humor, musikalske innslag og lokale referanser. Revyen produseres
+              av studenter i Ålesund Studentsamfunn.
+            </p>
+          </article>
+          <article class="info-card">
+            <h3>Billetter</h3>
+            <p>
+              Billetter kjøpes via Tikkio. Der finner du oppdatert status for tilgjengelige forestillinger.
+            </p>
+            <a href={ticketHref} target="_blank" rel="noreferrer" class="inline-link">Gå til billettsiden</a>
+          </article>
+          <article class="info-card">
+            <h3>Spørsmål</h3>
+            <p>
+              Kontakt arrangør på <a href="mailto:ukaa@astudent.no" class="inline-link">ukaa@astudent.no</a>
+              for spørsmål om forestilling, tilgjengelighet eller billetter.
+            </p>
+          </article>
+        </div>
+      </section>
+    </div>
+
+    <Footer />
+  </div>
+</PageLayout>
+
+<style is:global>
+  .revy-page {
+    background: #f7ecd8;
+    min-height: 100svh;
+  }
+
+  .hero-dot-bg {
+    background-image: radial-gradient(circle, rgba(27, 27, 27, 0.1) 1.5px, transparent 1.5px);
+    background-size: 26px 26px;
+  }
+
+  .hero-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    padding: 0.55rem 1.15rem;
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: transform 150ms ease, filter 150ms ease, background 150ms ease;
+  }
+
+  .hero-pill:hover {
+    transform: translateY(-1px);
+  }
+
+  .hero-pill--solid {
+    background: #1b1b1b;
+    color: white;
+  }
+
+  .hero-pill--solid:hover {
+    filter: brightness(1.08);
+  }
+
+  .hero-pill--ghost {
+    background: rgba(255, 255, 255, 0.5);
+    border: 1px solid rgba(27, 27, 27, 0.2);
+    color: #1b1b1b;
+  }
+
+  .hero-pill--ghost:hover {
+    background: rgba(255, 255, 255, 0.74);
+  }
+
+  .revy-section,
+  .info-section {
+    margin-top: 0.5rem;
+  }
+
+  .info-section {
+    margin-top: 3.5rem;
+    scroll-margin-top: 6rem;
+  }
+
+  .day-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #fdbc5b;
+    margin-bottom: 1.5rem;
+  }
+
+  .day-header__label {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.28em;
+    font-weight: 700;
+    color: #a07830;
+  }
+
+  .day-header__date {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #1b1b1b;
+    line-height: 1.1;
+    margin-top: 0.2rem;
+  }
+
+  .day-header__summary {
+    margin-top: 0.3rem;
+    font-size: 0.875rem;
+    color: #7a5e30;
+  }
+
+  .day-count {
+    flex-shrink: 0;
+    font-size: 0.78rem;
+    padding: 0.35rem 0.9rem;
+    border-radius: 999px;
+    background: #fdbc5b;
+    color: #1b1b1b;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  .day-empty {
+    font-size: 0.9rem;
+    color: #a07830;
+    font-style: italic;
+    padding: 0.5rem 0;
+  }
+
+  .day-grid {
+    display: grid;
+    gap: 1.1rem;
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 480px) {
+    .day-grid {
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .day-grid {
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    }
+
+    .day-header__date {
+      font-size: 2.5rem;
+    }
+  }
+
+  .event-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    border-radius: 1.25rem;
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.07);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    transition: transform 220ms ease, box-shadow 220ms ease;
+    --event-accent: #fdbc5b;
+    cursor: pointer;
+  }
+
+  .event-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.11);
+  }
+
+  .event-card__open {
+    position: absolute;
+    inset: 0;
+    z-index: 20;
+    border-radius: inherit;
+  }
+
+  .event-card__open:focus-visible {
+    outline: 2px solid #1b1b1b;
+    outline-offset: -2px;
+  }
+
+  .event-card__banner {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .event-card__banner img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 400ms ease;
+  }
+
+  .event-card:hover .event-card__banner img {
+    transform: scale(1.06);
+  }
+
+  .event-card__banner-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, transparent 45%, rgba(0, 0, 0, 0.35));
+  }
+
+  .event-card__bar {
+    height: 3px;
+    background: var(--event-accent);
+    flex-shrink: 0;
+  }
+
+  .event-card__body {
+    position: relative;
+    padding: 1.1rem 1.3rem 1.3rem;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+
+  .event-card__open-indicator {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    z-index: 25;
+    opacity: 1;
+    transition: opacity 180ms ease;
+    pointer-events: none;
+  }
+
+  .event-card__open-indicator-inner {
+    display: flex;
+    height: 2rem;
+    width: 2rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: rgba(27, 27, 27, 0.42);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+
+  @media (min-width: 768px) {
+    .event-card__open-indicator {
+      opacity: 0;
+    }
+
+    .event-card:hover .event-card__open-indicator {
+      opacity: 1;
+    }
+  }
+
+  .event-card__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-bottom: 0.55rem;
+  }
+
+  .event-card__date {
+    font-size: 1.05rem;
+    line-height: 1.2;
+    font-weight: 900;
+    color: #1b1b1b;
+    letter-spacing: 0.01em;
+  }
+
+  .event-time {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #7a5e30;
+    white-space: nowrap;
+  }
+
+  .event-card__title {
+    margin-top: 0;
+    font-size: 1.15rem;
+    font-weight: 800;
+    line-height: 1.25;
+    color: #1b1b1b;
+  }
+
+  .event-card__desc {
+    margin-top: 0.45rem;
+    font-size: 0.85rem;
+    color: #555;
+    line-height: 1.6;
+  }
+
+  .event-card__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: auto;
+    padding-top: 1rem;
+  }
+
+  .event-meta-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.22rem 0.65rem;
+    border-radius: 999px;
+    background: #f7ecd8;
+    color: #6b5030;
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+
+  .info-grid {
+    display: grid;
+    gap: 1.1rem;
+    grid-template-columns: 1fr;
+  }
+
+  .video-card {
+    border-radius: 1.25rem;
+    border: 1px solid rgba(0, 0, 0, 0.07);
+    background: #fff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    padding: 1.2rem;
+    margin-bottom: 1.1rem;
+  }
+
+  .video-card h3 {
+    color: #1b1b1b;
+    font-size: 1.15rem;
+    font-weight: 800;
+    margin-bottom: 0.35rem;
+  }
+
+  .video-card p {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: #555;
+    margin-bottom: 0.85rem;
+  }
+
+  .video-embed-wrap {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border-radius: 0.9rem;
+    overflow: hidden;
+    background: #111;
+  }
+
+  .video-embed-wrap iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
+  }
+
+  @media (min-width: 760px) {
+    .info-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .info-card {
+    border-radius: 1.25rem;
+    border: 1px solid rgba(0, 0, 0, 0.07);
+    background: #fff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    padding: 1.2rem;
+  }
+
+  .info-card h3 {
+    color: #1b1b1b;
+    font-size: 1.15rem;
+    font-weight: 800;
+    margin-bottom: 0.45rem;
+  }
+
+  .info-card p {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: #555;
+  }
+
+  .inline-link {
+    color: #7f5105;
+    text-decoration: underline;
+    text-decoration-thickness: 1.5px;
+    text-underline-offset: 2px;
+    font-weight: 700;
+  }
+</style>

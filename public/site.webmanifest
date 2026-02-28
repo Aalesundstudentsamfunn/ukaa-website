@@ -1,12 +1,12 @@
 {
-  "name": "Ski & Magi",
-  "short_name": "Ski & Magi",
-  "description": "Opplev vintermagien i Sogndal - afterski, fjell og magi med Ski & Magi.",
-  "start_url": "/program",
+  "name": "U.-KA.",
+  "short_name": "U.-KA.",
+  "description": "U.-KA. er en energisk og fargerik studentfestival i Ålesund med konserter, show, foredrag og sosiale arrangementer gjennom hele uka.",
+  "start_url": "/",
   "scope": "/",
   "display": "standalone",
-  "background_color": "#0b0f1a",
-  "theme_color": "#0b0f1a",
+  "background_color": "#eadfd0",
+  "theme_color": "#fdbc5b",
   "orientation": "portrait",
 
   "icons": [

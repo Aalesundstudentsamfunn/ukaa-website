@@ -3,4 +3,4 @@ Allow: /
 Disallow: /api/
 
 # Sitemap 
-Sitemap: https://skiogmagi.no/sitemap.xml
+Sitemap: https://ukaa.no/sitemap.xml
