@@ -35,6 +35,7 @@
     "tailwindcss": "^4.1.16"
   },
   "overrides": {
+    "@iconify/tools": "4.0.5",
     "astro-cloudinary": {
       "@unpic/astro": "0.0.47",
       "@unpic/core": "0.0.49",
