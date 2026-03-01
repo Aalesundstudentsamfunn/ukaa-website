@@ -19,6 +19,7 @@ type ProgramItem = {
   description?: string;
   banner?: string;
   poster?: string;
+  ticketUrl?: string;
 };
 
 type ProgramEntry = CollectionEntry<"program">;
@@ -34,6 +35,7 @@ const dateRange = "12.–22. mars 2026";
 const desc = "U.-KA. fyller Ålesund med konserter, show og opplevelser gjennom hele uka. Programmet oppdateres fortløpende.";
 
 const formatCount = (count: number) => (count === 1 ? "1 arrangement" : `${count} arrangementer`);
+const defaultTicketUrl = "https://tikkio.com/organizer/2624-ass-alesund-studentsamfunn";
 
 const cloudName = import.meta.env.PUBLIC_CLOUDINARY_CLOUD_NAME;
 const cloudUrl = (id: string, w = 800) =>
@@ -109,8 +111,8 @@ const badgeClass = (type: string) => {
         <div class="day-strip">
           {days.map((day) => (
             <a href={`#${day.id}`} class="day-pill" data-day-link={day.id}>
+              <span class="day-pill__day">{day.label}</span>
               <span class="day-pill__date">{day.dateLabel ?? "TBA"}</span>
-              <span class="day-pill__label">{day.label}</span>
             </a>
           ))}
         </div>
@@ -142,21 +144,44 @@ const badgeClass = (type: string) => {
                       <article
                         class="event-card"
                         style={`--event-accent: ${accent}`}
-                        data-ev-title={event.title}
-                        data-ev-time={event.time || "TBA"}
-                        data-ev-type={type}
-                        data-ev-accent={accent}
-                        data-ev-location={event.location || ""}
-                        data-ev-desc={event.description || ""}
-                        data-ev-banner={event.banner ? cloudUrl(event.banner, 1200) : ""}
-                        data-ev-poster={event.poster ? cloudUrl(event.poster, 900) : ""}
                       >
-                        <button type="button" class="event-card__open" aria-label={`Åpne ${event.title}`} data-open-event></button>
+                        <a
+                          href={event.ticketUrl || defaultTicketUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                          class="event-card__open"
+                          aria-label={`Kjøp billetter til ${event.title}`}
+                        ></a>
+                        <div class="event-card__open-indicator" aria-hidden="true">
+                          <div class="event-card__open-indicator-inner">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-3.5 w-3.5 text-white">
+                              <path fill-rule="evenodd" d="M5.22 14.78a.75.75 0 0 0 1.06 0l7.22-7.22v5.69a.75.75 0 0 0 1.5 0v-7.5a.75.75 0 0 0-.75-.75h-7.5a.75.75 0 0 0 0 1.5h5.69l-7.22 7.22a.75.75 0 0 0 0 1.06Z" clip-rule="evenodd" />
+                            </svg>
+                          </div>
+                        </div>
 
-                        {event.banner && (
-                          <div class="event-card__banner">
+                        {event.banner ? (
+                          <button
+                            type="button"
+                            class="event-card__banner"
+                            data-lightbox-src={cloudUrl(event.banner, 1600)}
+                            data-lightbox-caption={`${event.title}${event.time ? ` · ${event.time}` : ""}`}
+                            aria-label={`Vis plakat for ${event.title}`}
+                          >
                             <img src={cloudUrl(event.banner, 700)} alt="" loading="lazy" draggable="false" />
                             <div class="event-card__banner-overlay"></div>
+                            <div class="event-card__banner-zoom" aria-hidden="true">
+                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4">
+                                <path d="M13.28 7.78l3.22-3.22v2.69a.75.75 0 001.5 0v-4.5a.75.75 0 00-.75-.75h-4.5a.75.75 0 000 1.5h2.69l-3.22 3.22a.75.75 0 001.06 1.06zM2 17.25v-4.5a.75.75 0 011.5 0v2.69l3.22-3.22a.75.75 0 011.06 1.06L4.56 16.5h2.69a.75.75 0 010 1.5h-4.5a.75.75 0 01-.75-.75z" />
+                              </svg>
+                            </div>
+                          </button>
+                        ) : (
+                          <div class="event-card__banner-placeholder" aria-hidden="true">
+                            <div class="event-card__banner-placeholder-dots"></div>
+                            <div class="event-card__banner-placeholder-orb event-card__banner-placeholder-orb--1"></div>
+                            <div class="event-card__banner-placeholder-orb event-card__banner-placeholder-orb--2"></div>
+                            <span class="event-card__banner-placeholder-type">{event.title}</span>
                           </div>
                         )}
 
@@ -171,7 +196,6 @@ const badgeClass = (type: string) => {
                           {event.description && <p class="event-card__desc">{event.description}</p>}
                           <div class="event-card__meta">
                             {event.location && <span class="event-meta-pill">{event.location}</span>}
-                            {event.poster && <span class="event-meta-pill event-meta-pill--poster">Plakat</span>}
                           </div>
                         </div>
                       </article>
@@ -187,39 +211,18 @@ const badgeClass = (type: string) => {
       </div>
     </div>
 
-    <!-- ── Event modal — dialog only, no wrapper div ── -->
-    <dialog id="event-modal" class="event-modal" aria-labelledby="em-title">
-      <div class="event-modal__panel">
-        <div class="event-modal__bar" id="em-bar"></div>
-
-        <div class="event-modal__banner-wrap" id="em-banner-wrap">
-          <img id="em-banner" src="" alt="" draggable="false" />
-          <div class="event-modal__banner-fade"></div>
-        </div>
-
-        <header class="event-modal__header">
-          <div class="event-modal__header-meta">
-            <span class="event-tag" id="em-type"></span>
-            <span class="event-time" id="em-time"></span>
-          </div>
-          <div class="event-modal__header-row">
-            <h3 id="em-title" class="event-modal__title"></h3>
-            <button type="button" class="event-modal__close-x" aria-label="Lukk" data-close-event>
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5">
-                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 0 1 1.414 0L10 8.586l4.293-4.293a1 1 0 1 1 1.414 1.414L11.414 10l4.293 4.293a1 1 0 0 1-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L8.586 10 4.293 5.707a1 1 0 0 1 0-1.414Z" clip-rule="evenodd" />
-              </svg>
-            </button>
-          </div>
-          <p class="event-modal__location" id="em-location"></p>
-        </header>
-
-        <div class="event-modal__body" id="em-body"></div>
-
-        <footer class="event-modal__footer">
-          <button type="button" class="event-modal__close-btn" data-close-event>Lukk</button>
-        </footer>
+    <!-- Poster Lightbox -->
+    <div class="poster-lightbox" id="poster-lightbox" aria-hidden="true">
+      <div class="poster-lightbox__wrap">
+        <button class="poster-lightbox__close" aria-label="Lukk">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-5 w-5">
+            <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
+          </svg>
+        </button>
+        <img class="poster-lightbox__img" src="" alt="Plakat" />
+        <div class="poster-lightbox__caption" id="poster-lightbox-caption"></div>
       </div>
-    </dialog>
+    </div>
 
     <Footer />
   </div>
@@ -243,121 +246,43 @@ const badgeClass = (type: string) => {
       window.addEventListener("hashchange", setActive);
     }
 
-    // Event modal
-    const dlg = document.getElementById("event-modal");
-    if (!dlg) return;
+    // ── Poster lightbox ──
+    // Move to body so it escapes the `isolate` stacking context on <main>
+    const lb = document.getElementById("poster-lightbox");
+    if (lb) {
+      document.body.appendChild(lb);
+      const lbImg = lb.querySelector(".poster-lightbox__img");
+      const lbCaption = document.getElementById("poster-lightbox-caption");
+      const lbClose = lb.querySelector(".poster-lightbox__close");
 
-    const bar        = document.getElementById("em-bar");
-    const bannerWrap = document.getElementById("em-banner-wrap");
-    const bannerImg  = document.getElementById("em-banner");
-    const typeEl     = document.getElementById("em-type");
-    const timeEl     = document.getElementById("em-time");
-    const titleEl    = document.getElementById("em-title");
-    const locationEl = document.getElementById("em-location");
-    const bodyEl     = document.getElementById("em-body");
+      const openLb = (src, caption) => {
+        lbImg.src = src;
+        if (lbCaption) lbCaption.textContent = caption || "";
+        lb.classList.add("is-open");
+        lb.setAttribute("aria-hidden", "false");
+        document.body.style.overflow = "hidden";
+      };
 
-    const badgeCls = (type) => {
-      const v = type.toLowerCase();
-      if (v === "konsert" || v === "fest") return "bg-ev-pink";
-      if (v === "revy"    || v === "show") return "bg-ev-yellow";
-      if (v === "quiz"    || v === "foredrag") return "bg-ev-blue";
-      if (v === "aktivitet" || v === "sport" || v === "tur") return "bg-ev-mint";
-      if (v === "film" || v === "temakveld" || v === "sosial") return "bg-ev-sand";
-      return "bg-ev-neutral";
-    };
+      const closeLb = () => {
+        lb.classList.remove("is-open");
+        lb.setAttribute("aria-hidden", "true");
+        document.body.style.overflow = "";
+      };
 
-    const openModal = (data) => {
-      if (bar) bar.style.background = data.accent;
-
-      if (bannerWrap && bannerImg) {
-        if (data.bannerUrl) {
-          bannerImg.src = data.bannerUrl;
-          bannerImg.alt = data.title;
-          bannerWrap.hidden = false;
-        } else {
-          bannerWrap.hidden = true;
-        }
-      }
-
-      if (typeEl) {
-        typeEl.textContent = data.type;
-        typeEl.className = "event-tag " + badgeCls(data.type);
-      }
-      if (timeEl) timeEl.textContent = data.time;
-      if (titleEl) titleEl.textContent = data.title;
-      if (locationEl) {
-        locationEl.textContent = data.location;
-        locationEl.hidden = !data.location;
-      }
-
-      if (bodyEl) {
-        const descHtml = data.desc
-          ? `<p class="em-desc">${data.desc.replace(/</g, "&lt;")}</p>`
-          : "";
-        if (data.posterUrl) {
-          bodyEl.innerHTML = `
-            <div class="em-content-grid">
-              <div class="em-desc-col">${descHtml}</div>
-              <div class="em-poster-col">
-                <img class="em-poster-img" src="${data.posterUrl}" alt="${data.title.replace(/"/g,"&quot;")} plakat" draggable="false" />
-              </div>
-            </div>`;
-        } else {
-          bodyEl.innerHTML = descHtml;
-        }
-      }
-
-      dlg.classList.remove("is-closing");
-      try { dlg.showModal(); } catch { dlg.setAttribute("open", ""); }
-    };
-
-    const closeModal = () => {
-      if (!dlg.hasAttribute("open")) return;
-      dlg.classList.add("is-closing");
-      setTimeout(() => {
-        try { dlg.close(); } catch { dlg.removeAttribute("open"); }
-        dlg.classList.remove("is-closing");
-      }, 180);
-    };
-
-    // Open: click on the transparent card overlay
-    document.addEventListener("click", (e) => {
-      const btn = e.target.closest("[data-open-event]");
-      if (!btn) return;
-      e.stopPropagation();
-      const card = btn.closest(".event-card");
-      if (!card) return;
-      const d = card.dataset;
-      openModal({
-        title:     d.evTitle    || "",
-        time:      d.evTime     || "TBA",
-        type:      d.evType     || "Opplevelse",
-        accent:    d.evAccent   || "#fdbc5b",
-        location:  d.evLocation || "",
-        desc:      d.evDesc     || "",
-        bannerUrl: d.evBanner   || "",
-        posterUrl: d.evPoster   || "",
+      document.querySelectorAll("[data-lightbox-src]").forEach((btn) => {
+        btn.addEventListener("click", (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          openLb(btn.dataset.lightboxSrc, btn.dataset.lightboxCaption);
+        });
       });
-    });
 
-    // Close buttons (stop propagation so dlg click handler doesn't also fire)
-    dlg.querySelectorAll("[data-close-event]").forEach((b) =>
-      b.addEventListener("click", (e) => {
-        e.stopPropagation();
-        closeModal();
-      })
-    );
-
-    // ESC key
-    dlg.addEventListener("cancel", (e) => {
-      e.preventDefault();
-      closeModal();
-    });
-
-    // Backdrop: click on the <dialog> element itself (outside the panel)
-    dlg.addEventListener("click", (e) => {
-      if (e.target === dlg) closeModal();
-    });
+      if (lbClose) lbClose.addEventListener("click", (e) => { e.stopPropagation(); closeLb(); });
+      lb.addEventListener("click", (e) => { if (e.target === lb) closeLb(); });
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && lb.classList.contains("is-open")) closeLb();
+      });
+    }
   })();
 </script>
 
@@ -365,7 +290,7 @@ const badgeClass = (type: string) => {
   .program-page {
     background: #f7ecd8;
     min-height: 100svh;
-    --program-anchor-offset: 130px;
+    --program-anchor-offset: 160px;
   }
 
   .hero-dot-bg {
@@ -419,13 +344,13 @@ const badgeClass = (type: string) => {
     border-color: #fdbc5b;
   }
 
-  .day-pill__date {
+  .day-pill__day {
     font-size: 0.875rem;
     font-weight: 800;
     line-height: 1.2;
   }
 
-  .day-pill__label {
+  .day-pill__date {
     font-size: 0.62rem;
     font-weight: 600;
     text-transform: uppercase;
@@ -533,6 +458,40 @@ const badgeClass = (type: string) => {
     border: 0;
     padding: 0;
     cursor: pointer;
+    text-decoration: none;
+  }
+
+  .event-card__open-indicator {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    z-index: 25;
+    opacity: 1;
+    transition: opacity 180ms ease;
+    pointer-events: none;
+  }
+
+  .event-card__open-indicator-inner {
+    display: flex;
+    height: 2rem;
+    width: 2rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: rgba(27, 27, 27, 0.42);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+
+  @media (min-width: 768px) {
+    .event-card__open-indicator {
+      opacity: 0;
+    }
+
+    .event-card__open:hover ~ .event-card__open-indicator {
+      opacity: 1;
+    }
   }
 
   .event-card__banner {
@@ -540,6 +499,14 @@ const badgeClass = (type: string) => {
     aspect-ratio: 16 / 9;
     overflow: hidden;
     flex-shrink: 0;
+    z-index: 15;
+    cursor: zoom-in;
+    border: none;
+    padding: 0;
+    margin: 0;
+    background: #111;
+    width: 100%;
+    display: block;
   }
 
   .event-card__banner img {
@@ -644,201 +611,156 @@ const badgeClass = (type: string) => {
     font-weight: 500;
   }
 
-  .event-meta-pill--poster {
-    background: #1b1b1b;
-    color: #fff;
-    font-size: 0.62rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
-  /* ── Event modal ──
-     Key: never override `display` on the <dialog> itself.
-     The browser sets `display:none` when closed via the UA stylesheet.
-     We only style what's visible when open.
-  ── */
-  .event-modal {
-    padding: 1rem;
-    border: 0;
-    background: transparent;
-    max-width: min(90vw, 52rem);
-    max-height: 90dvh;
-    width: 100%;
-    overflow: visible;
-  }
-
-  .event-modal::backdrop {
-    background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
-  }
-
-  /* Panel enter animation */
-  .event-modal[open] .event-modal__panel {
-    animation: em-in 0.2s ease both;
-  }
-
-  .event-modal.is-closing .event-modal__panel {
-    animation: em-out 0.18s ease both;
-  }
-
-  @keyframes em-in {
-    from { opacity: 0; transform: scale(0.96) translateY(10px); }
-    to   { opacity: 1; transform: scale(1) translateY(0); }
-  }
-
-  @keyframes em-out {
-    from { opacity: 1; transform: scale(1); }
-    to   { opacity: 0; transform: scale(0.95) translateY(6px); }
-  }
-
-  .event-modal__panel {
-    display: grid;
-    grid-template-rows: auto auto auto 1fr auto;
-    max-height: calc(90dvh - 2rem);
-    border-radius: 1.5rem;
-    background: white;
-    box-shadow: 0 32px 80px rgba(0, 0, 0, 0.3);
-    overflow: hidden;
-  }
-
-  .event-modal__bar {
-    height: 4px;
-    flex-shrink: 0;
-  }
-
-  .event-modal__banner-wrap {
+  /* Banner placeholder */
+  .event-card__banner-placeholder {
     position: relative;
-    aspect-ratio: 16 / 7;
+    aspect-ratio: 16 / 9;
     overflow: hidden;
     flex-shrink: 0;
-  }
-
-  .event-modal__banner-wrap img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-  }
-
-  .event-modal__banner-fade {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.2));
-  }
-
-  .event-modal__header {
-    padding: 1.25rem 1.5rem 0.75rem;
-    border-bottom: 1px solid #f0ebe2;
-  }
-
-  .event-modal__header-meta {
+    background: var(--event-accent);
     display: flex;
     align-items: center;
-    gap: 0.6rem;
-    margin-bottom: 0.5rem;
-  }
-
-  .event-modal__header-row {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 1rem;
-  }
-
-  .event-modal__title {
-    font-size: 1.4rem;
-    font-weight: 800;
-    color: #1b1b1b;
-    line-height: 1.2;
-  }
-
-  @media (min-width: 640px) {
-    .event-modal__title { font-size: 1.75rem; }
-  }
-
-  .event-modal__close-x {
-    flex-shrink: 0;
-    border: 0;
-    background: transparent;
-    padding: 0.3rem;
-    color: #999;
-    cursor: pointer;
-    border-radius: 50%;
-    transition: background 120ms, color 120ms;
-    line-height: 0;
-  }
-
-  .event-modal__close-x:hover {
-    background: #f3f3f3;
-    color: #1b1b1b;
-  }
-
-  .event-modal__location {
-    margin-top: 0.4rem;
-    font-size: 0.82rem;
-    color: #888;
-    font-weight: 500;
-  }
-
-  .event-modal__body {
-    padding: 1.25rem 1.5rem;
-    overflow-y: auto;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-  }
-
-  .event-modal__body::-webkit-scrollbar { display: none; }
-
-  .em-content-grid {
-    display: grid;
-    gap: 1.25rem;
-    align-items: start;
-  }
-
-  @media (min-width: 560px) {
-    .em-content-grid { grid-template-columns: 1fr auto; }
-  }
-
-  .em-desc {
-    font-size: 0.95rem;
-    color: #444;
-    line-height: 1.7;
-  }
-
-  .em-poster-col {
-    display: flex;
     justify-content: center;
   }
 
-  .em-poster-img {
-    display: block;
-    width: min(160px, 38vw);
-    border-radius: 0.6rem;
-    box-shadow: 0 8px 28px rgba(0,0,0,0.22), 0 2px 6px rgba(0,0,0,0.1);
+  .event-card__banner-placeholder-dots {
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle, rgba(255, 255, 255, 0.2) 1.5px, transparent 1.5px);
+    background-size: 20px 20px;
   }
 
-  .event-modal__footer {
+  .event-card__banner-placeholder-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(30px);
+    pointer-events: none;
+  }
+
+  .event-card__banner-placeholder-orb--1 {
+    width: 60%;
+    height: 80%;
+    top: -20%;
+    right: -15%;
+    background: rgba(255, 255, 255, 0.18);
+  }
+
+  .event-card__banner-placeholder-orb--2 {
+    width: 50%;
+    height: 70%;
+    bottom: -25%;
+    left: -10%;
+    background: rgba(0, 0, 0, 0.08);
+  }
+
+  .event-card__banner-placeholder-type {
+    position: relative;
+    font-size: 0.65rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: rgba(0, 0, 0, 0.25);
+  }
+
+  /* Banner zoom indicator */
+  .event-card__banner-zoom {
+    position: absolute;
+    bottom: 0.6rem;
+    left: 0.6rem;
     display: flex;
-    justify-content: flex-end;
-    padding: 0.75rem 1.5rem;
-    border-top: 1px solid #f0ebe2;
-  }
-
-  .event-modal__close-btn {
-    border: 0;
+    height: 2rem;
+    width: 2rem;
+    align-items: center;
+    justify-content: center;
     border-radius: 999px;
-    background: #f0ebe2;
-    color: #555;
-    font-size: 0.875rem;
-    font-weight: 600;
-    padding: 0.5rem 1.4rem;
-    cursor: pointer;
-    transition: background 120ms;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: rgba(27, 27, 27, 0.5);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    color: white;
+    opacity: 0;
+    transition: opacity 180ms ease;
+    pointer-events: none;
   }
 
-  .event-modal__close-btn:hover {
-    background: #e5ddd0;
+  .event-card__banner:hover .event-card__banner-zoom {
+    opacity: 1;
+  }
+
+  /* Poster Lightbox */
+  .poster-lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    background: rgba(0, 0, 0, 0.92);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 250ms ease, visibility 250ms ease;
+  }
+
+  .poster-lightbox.is-open {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .poster-lightbox__wrap {
+    position: relative;
+    max-width: 100%;
+    max-height: 100%;
+    transform: scale(0.94);
+    transition: transform 300ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .poster-lightbox.is-open .poster-lightbox__wrap {
+    transform: scale(1);
+  }
+
+  .poster-lightbox__img {
+    display: block;
+    max-width: calc(100vw - 4rem);
+    max-height: calc(100vh - 4rem);
+    object-fit: contain;
+  }
+
+  .poster-lightbox__caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 2.5rem 1rem 0.8rem;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.6) 0%, transparent 100%);
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    pointer-events: none;
+  }
+
+  .poster-lightbox__close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    z-index: 10;
+    display: flex;
+    height: 2.25rem;
+    width: 2.25rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: white;
+    cursor: pointer;
+    transition: background 150ms ease;
+  }
+
+  .poster-lightbox__close:hover {
+    background: rgba(0, 0, 0, 0.6);
   }
 </style>
