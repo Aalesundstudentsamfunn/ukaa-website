@@ -99,6 +99,26 @@ body::-webkit-scrollbar {
   }
 }
 
+/* Skip to content link (accessibility) */
+.skip-link {
+  position: fixed;
+  top: -100%;
+  left: 1rem;
+  z-index: 9999;
+  padding: 0.5rem 1rem;
+  background: #1b1b1b;
+  color: white;
+  border-radius: 0 0 0.5rem 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: top 150ms ease;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
 /* Small global utilities shared across components */
 .rounded-inherit {
   border-radius: inherit;
