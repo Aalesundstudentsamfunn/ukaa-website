@@ -37,7 +37,7 @@ const { titleAriaLabel, subtitle, ctaLabel } = heroEntry.data;
 
   <!-- HERO -->
   <section class="hero-overlay relative z-10 flex flex-col items-center min-w-screen min-h-dvh gap-4 px-8 align-middle justify-center text-center">
-    <TitleSvg aria-label={titleAriaLabel} class="hero-tit w-[20%] min-w-[170px] drop-shadow-[0_2px_12px_rgba(0,0,0,0.35)] transition-all duration-300" />
+    <TitleSvg aria-label={titleAriaLabel} class="hero-tit w-[20%] min-w-[170px] max-w-[280px] drop-shadow-[0_2px_12px_rgba(0,0,0,0.35)] transition-all duration-300" />
 
     <h2 class="hero-sub mt-5 uppercase text-white/95 font-medium text-[clamp(1.75rem,4vw,2.25rem)]">{subtitle}</h2>
     <div class="mt-4 flex items-center gap-3">
@@ -234,9 +234,7 @@ const { titleAriaLabel, subtitle, ctaLabel } = heroEntry.data;
     transition-duration: 180ms, 160ms;
   }
 
-  /* once user played at least once, permanently hide poster & cover grad */
-  #container.has-played .poster,
-  #container.has-played .cover-grad {
+  #container.has-played .poster {
     opacity: 0;
     pointer-events: none;
   }
