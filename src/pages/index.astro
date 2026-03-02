@@ -1,17 +1,78 @@
 ---
-import Hero from "../components/Hero.astro";
-import Layout from "../layouts/Layout.astro";
-import About from "../components/About.astro";
-import FeaturedSection from "../components/FeaturedSection.astro";
-import CtaSection from "../components/CtaSection.astro";
-import Footer from "../components/Footer.astro"
-
+import "../assets/styles/global.css";
 ---
 
-<Layout>
-  <Hero />
-  <About />
-  <FeaturedSection />
-  <CtaSection />
-  <Footer />
-</Layout>
+<html lang="no">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>U.-KA. kommer snart!</title>
+    <meta name="description" content="U.-KA. kommer snart! 12.-22. mars 2026." />
+  </head>
+  <body>
+    <main class="coming-soon-wrap">
+      <section class="coming-soon-card" aria-labelledby="coming-soon-title">
+        <div class="coming-soon-inner">
+          <h1 id="coming-soon-title" class="coming-soon-title">U.-KA. kommer snart!</h1>
+          <p class="coming-soon-date">12.-22. mars 2026</p>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
+
+<style>
+  .coming-soon-wrap {
+    width: 100%;
+    min-height: 100dvh;
+    padding: 0;
+    display: grid;
+    place-items: center;
+    background-image:
+      radial-gradient(circle at 0% 100%, rgba(129, 201, 151, 0.38) 0, rgba(129, 201, 151, 0) 34%),
+      radial-gradient(circle, rgba(120, 84, 34, 0.22) 1.05px, transparent 1.05px),
+      linear-gradient(130deg, #f3cc75 0%, #f5bf59 45%, #f7b85a 100%);
+    background-size: auto, 26px 26px, auto;
+    background-position: left bottom, center, center;
+  }
+
+  .coming-soon-card {
+    width: 100%;
+    min-height: 100dvh;
+    display: grid;
+    place-items: center;
+    border-radius: 0;
+    padding: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .coming-soon-inner {
+    width: min(100%, 980px);
+    border-radius: 0;
+    border: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: clamp(2rem, 7vw, 5rem) clamp(1.2rem, 4vw, 2rem);
+    background: transparent;
+  }
+
+  .coming-soon-title {
+    margin: 0;
+    color: #1b1b1b;
+    font-size: clamp(2.4rem, 8vw, 5.2rem);
+    line-height: 1.04;
+    letter-spacing: 0.01em;
+  }
+
+  .coming-soon-date {
+    margin: clamp(0.7rem, 2.5vw, 1.2rem) 0 0;
+    color: rgba(27, 27, 27, 0.9);
+    font-size: clamp(1.1rem, 3.2vw, 2rem);
+    line-height: 1.2;
+  }
+
+</style>
