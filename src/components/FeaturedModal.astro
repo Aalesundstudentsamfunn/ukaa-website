@@ -245,16 +245,41 @@ const headingId = `${id}-title`;
       showImage(currentIndex);
     };
 
+    var sizeSkeleton = function (skeleton, imgwrap, w, h) {
+      var maxW = Math.min(window.innerWidth * 0.85, 900);
+      var maxH = window.innerHeight * 0.85;
+      var scale = Math.min(maxW / w, maxH / h, 1);
+      var sw = Math.round(w * scale) + "px";
+      var sh = Math.round(h * scale) + "px";
+      if (skeleton) {
+        skeleton.style.width = sw;
+        skeleton.style.height = sh;
+        skeleton.style.aspectRatio = "";
+      }
+      if (imgwrap) {
+        imgwrap.style.minWidth = sw;
+        imgwrap.style.minHeight = sh;
+      }
+    };
+
     var showImage = function (index) {
       if (!lightboxEl) return;
       var item = items[index];
       var img = lightboxEl.querySelector(".lightbox__img");
+      var imgwrap = lightboxEl.querySelector(".lightbox__imgwrap");
       var captionEl = lightboxEl.querySelector(".lightbox__caption");
       var skeleton = lightboxEl.querySelector(".lightbox__skeleton");
       var counter = lightboxEl.querySelector(".lightbox__counter");
       var prevBtn = lightboxEl.querySelector(".lightbox__nav--prev");
       var nextBtn = lightboxEl.querySelector(".lightbox__nav--next");
       var url = buildUrl(item.src);
+
+      // Size skeleton and wrapper from previous image or default 4:3
+      if (img.naturalWidth && img.naturalHeight) {
+        sizeSkeleton(skeleton, imgwrap, img.naturalWidth, img.naturalHeight);
+      } else {
+        sizeSkeleton(skeleton, imgwrap, 800, 600);
+      }
 
       // Show skeleton, hide image
       img.style.opacity = "0";
@@ -263,6 +288,7 @@ const headingId = `${id}-title`;
       img.onload = function () {
         img.style.opacity = "1";
         if (skeleton) skeleton.style.display = "none";
+        if (imgwrap) { imgwrap.style.minWidth = ""; imgwrap.style.minHeight = ""; }
       };
 
       img.setAttribute("src", url);
@@ -356,8 +382,6 @@ const headingId = `${id}-title`;
 
   dialog.modal .lightbox__skeleton {
     position: absolute;
-    width: min(75vw, 700px);
-    aspect-ratio: 16 / 10;
     border-radius: 0.75rem;
     background: rgba(255, 255, 255, 0.08);
     overflow: hidden;
