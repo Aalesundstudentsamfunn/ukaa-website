@@ -2,7 +2,7 @@
   "name": "U.-KA.",
   "short_name": "U.-KA.",
   "description": "U.-KA. er en energisk og fargerik studentfestival i Ålesund med konserter, show, foredrag og sosiale arrangementer gjennom hele uka.",
-  "start_url": "/",
+  "start_url": "/program/",
   "scope": "/",
   "display": "standalone",
   "background_color": "#eadfd0",
