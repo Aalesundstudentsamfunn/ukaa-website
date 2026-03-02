@@ -1,18 +1,22 @@
 ---
 import { CldImage } from "astro-cloudinary";
 
+type GalleryItem = string | { src: string; alt?: string; caption?: string };
+
 export interface Props {
   id: string;
   title: string;
-  meta?: string;
   tag?: string;
-  people?: string;
   blurb?: string;
-  gallery?: string[];
+  gallery?: GalleryItem[];
   accent: string;
 }
 
-const { id, title, meta, tag, people, blurb, gallery = [], accent } = Astro.props as Props;
+const { id, title, tag, blurb, gallery = [], accent } = Astro.props as Props;
+
+const galleryItems = gallery.map((g) =>
+  typeof g === "string" ? { src: g, alt: undefined, caption: undefined } : g,
+);
 
 const headingId = `${id}-title`;
 ---
@@ -37,9 +41,7 @@ const headingId = `${id}-title`;
           )}
           <h3 id={headingId} class="text-xl font-bold text-neutral-900 sm:text-2xl">
             {title}
-            {meta && <span class="font-normal text-neutral-400"> &bull; {meta}</span>}
           </h3>
-          {people && <p class="mt-1 text-sm text-neutral-500">{people}</p>}
         </div>
 
         <button
@@ -60,22 +62,23 @@ const headingId = `${id}-title`;
         {blurb && <p class="mb-5 text-neutral-700 leading-relaxed text-[0.95rem]">{blurb}</p>}
 
         <!-- Gallery -->
-        {gallery.length > 0 && (
+        {galleryItems.length > 0 && (
           <div>
             <p class="mb-3 text-[0.65rem] font-bold uppercase tracking-[0.2em] text-neutral-400">Galleri</p>
             <div class="grid grid-cols-2 gap-3 sm:grid-cols-3">
-              {gallery.map((g, i) => (
+              {galleryItems.map((g, i) => (
                 <figure
                   class="relative aspect-4/3 overflow-hidden rounded-xl bg-neutral-100 ring-1 ring-black/5 cursor-zoom-in"
-                  aria-label={`Bilde ${i + 1} av ${title}`}
+                  aria-label={g.alt || `Bilde ${i + 1} av ${title}`}
                   data-img-wrapper
-                  data-public-id={g}
+                  data-public-id={g.src}
+                  data-caption={g.caption || ""}
                 >
                   <div class="absolute inset-0 skeleton" />
                   <CldImage
                     draggable="false"
-                    src={g}
-                    alt={`${title} bilde ${i + 1}`}
+                    src={g.src}
+                    alt={g.alt || `${title} bilde ${i + 1}`}
                     class="h-full w-full object-cover opacity-0 transition-opacity duration-300"
                     sizes="(min-width: 640px) 33vw, 50vw"
                     loading="lazy"
@@ -170,6 +173,7 @@ const headingId = `${id}-title`;
         <div class="lightbox__frame">
           <div class="lightbox__imgwrap">
             <img class="lightbox__img" alt="" />
+            <div class="lightbox__caption"></div>
             <button class="lightbox__close" aria-label="Lukk">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5">
                 <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 0 1 1.414 0L10 8.586l4.293-4.293a1 1 0 1 1 1.414 1.414L11.414 10l4.293 4.293a1 1 0 0 1-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L8.586 10 4.293 5.707a1 1 0 0 1 0-1.414Z" clip-rule="evenodd"></path>
@@ -221,12 +225,18 @@ const headingId = `${id}-title`;
         ev.preventDefault();
         const pid = fig.getAttribute("data-public-id");
         const url = buildUrl(pid);
+        const caption = fig.getAttribute("data-caption") || "";
         const overlay = ensureLightbox();
         const img = overlay?.querySelector(".lightbox__img");
+        const captionEl = overlay?.querySelector(".lightbox__caption");
         if (overlay && img && url) {
           img.setAttribute("src", url);
           img.setAttribute("alt", fig.getAttribute("aria-label") || "");
           img.setAttribute("draggable", "false");
+          if (captionEl) {
+            captionEl.textContent = caption;
+            captionEl.style.display = caption ? "" : "none";
+          }
           const scroller = dlg.querySelector(".gallery-scroll");
           scroller && scroller.classList.add("lightbox-open");
           overlay.classList.add("is-active");
@@ -303,6 +313,21 @@ const headingId = `${id}-title`;
     cursor: pointer;
     outline: none;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  }
+
+  dialog.modal .lightbox__caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 2.5rem 1rem 0.8rem;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.6) 0%, transparent 100%);
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    pointer-events: none;
+    border-radius: 0 0 12px 12px;
   }
 
   .gallery-scroll.lightbox-open {

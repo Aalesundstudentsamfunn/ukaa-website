@@ -1,18 +1,21 @@
 ---
 import FeaturedCard from "./FeaturedCard.astro";
 import FeaturedModal from "./FeaturedModal.astro";
-import { events, type EventItem } from "../data/events";
+import { getCollection } from "astro:content";
+
+const featuredEntries = await getCollection("featured");
+const items = featuredEntries
+  .map((e) => e.data)
+  .sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
 
 export interface Props {
   heading?: string;
   subheading?: string;
-  items?: EventItem[];
 }
 
 const {
   heading = "Utvalgt fra U.-KA.",
   subheading = "Et utvalg høydepunkter fra studentfestivalen i Ålesund.",
-  items = events,
 } = Astro.props as Props;
 ---
 
