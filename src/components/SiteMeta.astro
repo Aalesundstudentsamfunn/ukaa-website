@@ -51,6 +51,12 @@ const ogImageUrl = Astro.site
 <!-- Theme colors -->
 <meta name="theme-color" content={themeColor} />
 
+<!-- Preconnect to external resources -->
+<link rel="preconnect" href="https://res.cloudinary.com" />
+<link rel="dns-prefetch" href="https://res.cloudinary.com" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
 <!-- Apple mobile -->
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black" />
@@ -64,13 +70,50 @@ const ogImageUrl = Astro.site
 
 <!-- Open Graph -->
 <meta property="og:type" content="website" />
+<meta property="og:site_name" content={siteName} />
+<meta property="og:locale" content="nb_NO" />
 <meta property="og:title" content={socialTitle} />
 <meta property="og:description" content={description} />
 <meta property="og:url" content={pageUrl} />
 <meta property="og:image" content={ogImageUrl} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
 
 <!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content={socialTitle} />
 <meta name="twitter:description" content={description} />
 <meta name="twitter:image" content={ogImageUrl} />
+
+<!-- JSON-LD Structured Data -->
+<script is:inline type="application/ld+json" set:html={JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "Event",
+  "name": "U.-KA. 2026",
+  "description": description,
+  "startDate": "2026-03-12",
+  "endDate": "2026-03-22",
+  "eventStatus": "https://schema.org/EventScheduled",
+  "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+  "location": {
+    "@type": "Place",
+    "name": "Ålesund",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Ålesund",
+      "addressCountry": "NO"
+    }
+  },
+  "organizer": {
+    "@type": "Organization",
+    "name": "Ålesund Studentsamfunn",
+    "url": "https://ukaa.no"
+  },
+  "image": ogImageUrl,
+  "url": "https://ukaa.no",
+  "offers": {
+    "@type": "Offer",
+    "url": "https://tikkio.com/organizer/2624-ass-alesund-studentsamfunn",
+    "availability": "https://schema.org/InStock"
+  }
+})} />
