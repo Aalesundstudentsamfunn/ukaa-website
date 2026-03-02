@@ -215,7 +215,7 @@ const headingId = `${id}-title`;
       if (!publicId) return "";
       if (/^https?:\/\//.test(publicId)) return publicId;
       if (!cloudName) return "";
-      return `https://res.cloudinary.com/${cloudName}/image/upload/f_auto,q_auto,w_1600/${publicId}`;
+      return `https://res.cloudinary.com/${cloudName}/image/upload/f_auto,q_auto,w_1200/${publicId}`;
     };
 
     dlg.querySelectorAll("figure[data-img-wrapper]").forEach((fig) => {
