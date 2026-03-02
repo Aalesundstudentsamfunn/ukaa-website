@@ -40,6 +40,7 @@ const events = defineCollection({
           ]).default("Opplevelse"),
           location: z.string().optional(),
           description: z.string().optional(),
+          caption: z.string().optional(),
           img: z.string().optional(),
           ticketUrl: z.string().optional(),
           linkUrl: z.string().optional(),
