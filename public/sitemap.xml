@@ -15,4 +15,11 @@
     <priority>0.9</priority>
   </url>
 
+  <!-- Revyen page -->
+  <url>
+    <loc>https://ukaa.no/revy/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
 </urlset>
