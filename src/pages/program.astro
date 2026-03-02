@@ -227,7 +227,8 @@ const badgeStyle = (type: string) => {
           link.classList.toggle("is-active", match);
           match ? link.setAttribute("aria-current", "true") : link.removeAttribute("aria-current");
           if (match && strip) {
-            link.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+            var left = link.offsetLeft - strip.offsetWidth / 2 + link.offsetWidth / 2;
+            strip.scrollTo({ left: left, behavior: "smooth" });
           }
         });
       };
@@ -259,7 +260,23 @@ const badgeStyle = (type: string) => {
       const lbClose = lb.querySelector(".poster-lightbox__close");
       const lbSkeleton = document.getElementById("poster-lightbox-skeleton");
 
+      const sizePosterSkeleton = (w, h) => {
+        if (!lbSkeleton) return;
+        const maxW = window.innerWidth - 64;
+        const maxH = window.innerHeight - 64;
+        const scale = Math.min(maxW / w, maxH / h, 1);
+        lbSkeleton.style.width = Math.round(w * scale) + "px";
+        lbSkeleton.style.height = Math.round(h * scale) + "px";
+        lbSkeleton.style.aspectRatio = "";
+      };
+
       const openLb = (src, caption) => {
+        // Size skeleton from previous image or default portrait 3:4
+        if (lbImg.naturalWidth && lbImg.naturalHeight) {
+          sizePosterSkeleton(lbImg.naturalWidth, lbImg.naturalHeight);
+        } else {
+          sizePosterSkeleton(450, 600);
+        }
         lbImg.style.opacity = "0";
         if (lbSkeleton) lbSkeleton.style.display = "";
         lbImg.src = src;
@@ -861,8 +878,6 @@ const badgeStyle = (type: string) => {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    height: min(70vh, 550px);
-    aspect-ratio: 3 / 4;
     border-radius: 0.75rem;
     background: rgba(255, 255, 255, 0.08);
     overflow: hidden;
