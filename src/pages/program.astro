@@ -43,7 +43,6 @@ const dateRange = "12.–22. mars 2026";
 const desc = "U.-KA. fyller Ålesund med konserter, show og opplevelser gjennom hele uka. Programmet oppdateres fortløpende.";
 
 const formatCount = (count: number) => (count === 1 ? "1 arrangement" : `${count} arrangementer`);
-const defaultTicketUrl = "https://tikkio.com/organizer/2624-ass-alesund-studentsamfunn";
 
 const resolveProgramImage = (item: ProgramItem) => item.banner;
 
@@ -114,25 +113,30 @@ const badgeStyle = (type: string) => {
                     const type = event.type || "Aktivitet";
                     const accent = accentFor(event);
                     const cardImage = resolveProgramImage(event);
+                    const externalUrl = event.linkUrl || event.ticketUrl;
                     return (
                       <article
-                        class="event-card"
+                        class={`event-card${externalUrl ? " event-card--linked" : ""}`}
                         style={`--event-accent: ${accent}`}
                       >
-                        <a
-                          href={event.linkUrl || event.ticketUrl || defaultTicketUrl}
-                          target="_blank"
-                          rel="noreferrer"
-                          class="event-card__open"
-                          aria-label={`Kjøp billetter til ${event.title}`}
-                        ></a>
-                        <div class="event-card__open-indicator" aria-hidden="true">
-                          <div class="event-card__open-indicator-inner">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-3.5 w-3.5 text-white">
-                              <path fill-rule="evenodd" d="M5.22 14.78a.75.75 0 0 0 1.06 0l7.22-7.22v5.69a.75.75 0 0 0 1.5 0v-7.5a.75.75 0 0 0-.75-.75h-7.5a.75.75 0 0 0 0 1.5h5.69l-7.22 7.22a.75.75 0 0 0 0 1.06Z" clip-rule="evenodd" />
-                            </svg>
+                        {externalUrl && (
+                          <a
+                            href={externalUrl}
+                            target="_blank"
+                            rel="noreferrer"
+                            class="event-card__open"
+                            aria-label={`Kjøp billetter til ${event.title}`}
+                          ></a>
+                        )}
+                        {externalUrl && (
+                          <div class="event-card__open-indicator" aria-hidden="true">
+                            <div class="event-card__open-indicator-inner">
+                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-3.5 w-3.5 text-white">
+                                <path fill-rule="evenodd" d="M5.22 14.78a.75.75 0 0 0 1.06 0l7.22-7.22v5.69a.75.75 0 0 0 1.5 0v-7.5a.75.75 0 0 0-.75-.75h-7.5a.75.75 0 0 0 0 1.5h5.69l-7.22 7.22a.75.75 0 0 0 0 1.06Z" clip-rule="evenodd" />
+                              </svg>
+                            </div>
                           </div>
-                        </div>
+                        )}
 
                         {cardImage ? (
                           <button
@@ -491,6 +495,10 @@ const badgeStyle = (type: string) => {
     transition: transform 260ms cubic-bezier(0.22, 1, 0.36, 1),
                 box-shadow 260ms cubic-bezier(0.22, 1, 0.36, 1);
     --event-accent: #fdbc5b;
+    cursor: default;
+  }
+
+  .event-card--linked {
     cursor: pointer;
   }
 
