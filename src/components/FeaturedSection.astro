@@ -57,4 +57,28 @@ const {
     const dlg = id && document.getElementById(id);
     if (dlg instanceof HTMLDialogElement || dlg instanceof HTMLElement) openModal(dlg);
   });
+
+  // Preload modal gallery images on card hover
+  const preloaded = new Set();
+  document.querySelectorAll(".featured-card").forEach((card) => {
+    card.addEventListener("mouseenter", () => {
+      const target = card.querySelector("[data-target]");
+      if (!target) return;
+      const modalId = target.getAttribute("data-target");
+      if (!modalId || preloaded.has(modalId)) return;
+      preloaded.add(modalId);
+      const modal = document.getElementById(modalId);
+      if (!modal) return;
+      modal.querySelectorAll("img[loading='lazy']").forEach((img) => {
+        if (!img.src) return;
+        var link = document.createElement("link");
+        link.rel = "preload";
+        link.as = "image";
+        link.href = img.currentSrc || img.src;
+        if (img.srcset) link.imageSrcset = img.srcset;
+        if (img.sizes) link.imageSizes = img.sizes;
+        document.head.appendChild(link);
+      });
+    }, { once: true });
+  });
 </script>
