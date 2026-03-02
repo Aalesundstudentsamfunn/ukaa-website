@@ -59,7 +59,7 @@ const navLinks = [
             href="https://www.facebook.com/ukaialesund/"
             target="_blank"
             aria-label="Facebook"
-            class="grid h-9 w-9 place-items-center rounded-full bg-[#1b1b1b] text-white shadow-sm transition hover:opacity-75"
+            class="footer-social grid h-9 w-9 place-items-center rounded-full bg-[#1b1b1b] text-white shadow-sm"
           >
             <Icon name="mdi:facebook" class="h-5 w-5" />
           </a>
@@ -67,7 +67,7 @@ const navLinks = [
             href="https://www.instagram.com/ukaialesund/"
             target="_blank"
             aria-label="Instagram"
-            class="grid h-9 w-9 place-items-center rounded-full bg-[#1b1b1b] text-white shadow-sm transition hover:opacity-75"
+            class="footer-social grid h-9 w-9 place-items-center rounded-full bg-[#1b1b1b] text-white shadow-sm"
           >
             <Icon name="mdi:instagram" class="h-5 w-5" />
           </a>
@@ -87,5 +87,16 @@ const navLinks = [
   .footer-dot-bg {
     background-image: radial-gradient(circle, rgba(27, 27, 27, 0.08) 1.5px, transparent 1.5px);
     background-size: 26px 26px;
+  }
+
+  .footer-social {
+    will-change: opacity;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    transition: opacity 150ms ease;
+  }
+
+  .footer-social:hover {
+    opacity: 0.75;
   }
 </style>
