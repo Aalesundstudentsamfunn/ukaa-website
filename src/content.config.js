@@ -6,12 +6,11 @@ const hero = defineCollection({
     titleAriaLabel: z.string(),
     subtitle: z.string(),
     ctaLabel: z.string(),
-    // optional if you ever want multiple hero variants and sort them
     order: z.number().optional(),
   }),
 });
 
-const program = defineCollection({
+const events = defineCollection({
   type: "content",
   schema: z.object({
     order: z.number(),
@@ -25,34 +24,67 @@ const program = defineCollection({
         z.object({
           time: z.string(),
           title: z.string(),
+          type: z.enum([
+            "Revy",
+            "Show",
+            "Konsert",
+            "Quiz",
+            "Fest",
+            "Tur",
+            "Sport",
+            "Aktivitet",
+            "Sosial",
+            "Film",
+            "Seminar",
+            "Opplevelse",
+          ]).default("Opplevelse"),
           location: z.string().optional(),
           description: z.string().optional(),
-          banner: z.string().optional(),
-          poster: z.string().optional(),
+          img: z.string().optional(),
           ticketUrl: z.string().optional(),
+          linkUrl: z.string().optional(),
         }),
       )
       .optional(),
   }),
 });
 
-const memories = defineCollection({
+const featured = defineCollection({
   type: "content",
   schema: z.object({
+    order: z.number().optional(),
     id: z.string(),
     title: z.string(),
     tag: z.string().optional(),
-    year: z.string(),
-    people: z.string().optional(),
+    year: z.string().optional(),
     img: z.string(),
-    tint: z.string(),
-    blurb: z.string(),
+    accent: z.string().optional(),
+    tint: z.string().optional(),
+    blurb: z.string().optional(),
     gallery: z.array(z.string()).optional(),
+    poster: z.string().optional(),
+    ticketHref: z.string().optional(),
+  }),
+});
+
+const revy = defineCollection({
+  type: "content",
+  schema: z.object({
+    order: z.number().optional(),
+    title: z.string(),
+    day: z.string(),
+    date: z.string(),
+    time: z.string(),
+    location: z.string(),
+    description: z.string(),
+    banner: z.string().optional(),
+    ticketUrl: z.string().optional(),
   }),
 });
 
 export const collections = {
   hero,
-  program,
-  memories,
+  events,
+  featured,
+  revy,
 };
