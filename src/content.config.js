@@ -62,7 +62,18 @@ const featured = defineCollection({
     accent: z.string().optional(),
     tint: z.string().optional(),
     blurb: z.string().optional(),
-    gallery: z.array(z.string()).optional(),
+    gallery: z
+      .array(
+        z.union([
+          z.string(),
+          z.object({
+            src: z.string(),
+            alt: z.string().optional(),
+            caption: z.string().optional(),
+          }),
+        ]),
+      )
+      .optional(),
     poster: z.string().optional(),
     ticketHref: z.string().optional(),
   }),
