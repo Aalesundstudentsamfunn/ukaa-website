@@ -41,6 +41,7 @@ const events = defineCollection({
           location: z.string().optional(),
           description: z.string().optional(),
           caption: z.string().optional(),
+          alt: z.string().optional(),
           img: z.string().optional(),
           ticketUrl: z.string().optional(),
           linkUrl: z.string().optional(),
