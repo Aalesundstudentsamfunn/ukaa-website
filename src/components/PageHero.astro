@@ -1,0 +1,55 @@
+---
+import { cloudUrl } from "../utils/cloudinary";
+
+export interface Props {
+  badge?: string;
+  title: string;
+  dateRange?: string;
+  description?: string;
+  bgColor?: string;
+  heroImage?: string;
+}
+
+const {
+  badge = "U.-KA. 2026",
+  title,
+  dateRange,
+  description,
+  bgColor = "#fdbc5b",
+  heroImage = "skiogmagi_2025_1_yweuhz",
+} = Astro.props as Props;
+---
+
+<section class="relative mt-20 sm:mt-24">
+  <div class="mx-auto max-w-6xl px-6 pt-10 sm:pt-14">
+    <div class="relative overflow-hidden rounded-3xl" style={`background: ${bgColor}`}>
+      <div class="page-hero__dots absolute inset-0 pointer-events-none" aria-hidden="true"></div>
+      <div class="absolute -top-20 -right-20 h-72 w-72 rounded-full bg-[#f26f7a]/25 blur-3xl pointer-events-none" aria-hidden="true"></div>
+      <div class="absolute -bottom-16 -left-16 h-56 w-56 rounded-full bg-[#81c997]/30 blur-3xl pointer-events-none" aria-hidden="true"></div>
+      <div class="pointer-events-none absolute inset-3 rounded-2xl border border-white/25" aria-hidden="true"></div>
+
+      {heroImage && (
+        <div class="page-hero__photo absolute right-0 top-0 bottom-0 w-[44%] hidden lg:block" aria-hidden="true">
+          <img src={cloudUrl(heroImage, 800)} alt="" class="w-full h-full object-cover" loading="eager" />
+          <div class="absolute inset-0" style={`background: linear-gradient(to right, ${bgColor} 0%, transparent 30%)`}></div>
+          <div class="absolute inset-0" style={`background: linear-gradient(to top, ${bgColor} 0%, transparent 20%)`}></div>
+        </div>
+      )}
+
+      <div class="relative px-8 py-14 sm:px-12 sm:py-20 lg:max-w-[58%]">
+        <span class="inline-flex items-center rounded-full bg-[#1b1b1b] px-4 py-1.5 text-xs font-bold uppercase tracking-[0.2em] text-white shadow-sm">{badge}</span>
+        <h1 class="mt-4 text-5xl font-extrabold tracking-tight text-[#1b1b1b] leading-[1.05] sm:text-6xl">{title}</h1>
+        {dateRange && <p class="mt-3 text-lg font-semibold text-[#1b1b1b]/70">{dateRange}</p>}
+        {description && <p class="mt-3 max-w-md text-[#1b1b1b]/60 leading-relaxed text-[0.95rem]">{description}</p>}
+        <slot />
+      </div>
+    </div>
+  </div>
+</section>
+
+<style is:global>
+  .page-hero__dots {
+    background-image: radial-gradient(circle, rgba(27, 27, 27, 0.1) 1.5px, transparent 1.5px);
+    background-size: 26px 26px;
+  }
+</style>

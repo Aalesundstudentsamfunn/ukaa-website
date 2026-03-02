@@ -1,7 +1,9 @@
 ---
 import PageLayout from "../layouts/PageLayout.astro";
+import PageHero from "../components/PageHero.astro";
 import Footer from "../components/Footer.astro";
 import { getCollection, type CollectionEntry } from "astro:content";
+import { cloudUrl } from "../utils/cloudinary";
 
 type ProgramDay = {
   id: string;
@@ -16,11 +18,14 @@ type ProgramItem = {
   time: string;
   title: string;
   type?: string;
+  accent?: string;
   location?: string;
   description?: string;
   caption?: string;
   alt?: string;
-  img?: string;
+  banner?: string;
+  poster?: string;
+  disabled?: boolean;
   ticketUrl?: string;
   linkUrl?: string;
 };
@@ -40,27 +45,21 @@ const desc = "U.-KA. fyller Ålesund med konserter, show og opplevelser gjennom 
 const formatCount = (count: number) => (count === 1 ? "1 arrangement" : `${count} arrangementer`);
 const defaultTicketUrl = "https://tikkio.com/organizer/2624-ass-alesund-studentsamfunn";
 
-const cloudName = import.meta.env.PUBLIC_CLOUDINARY_CLOUD_NAME;
-const cloudUrl = (id: string, w = 800) =>
-  `https://res.cloudinary.com/${cloudName}/image/upload/f_auto,q_auto,w_${w}/${id}`;
+const resolveProgramImage = (item: ProgramItem) => item.banner;
 
 const typeColors: Record<string, { accent: string; bg: string; text: string }> = {
-  konsert:   { accent: "#f26f7a", bg: "#f26f7a", text: "white" },
-  fest:      { accent: "#f26f7a", bg: "#f26f7a", text: "white" },
-  revy:      { accent: "#fdbc5b", bg: "#fdbc5b", text: "#1b1b1b" },
-  show:      { accent: "#fdbc5b", bg: "#fdbc5b", text: "#1b1b1b" },
-  quiz:      { accent: "#84d5f3", bg: "#84d5f3", text: "#1b1b1b" },
-  seminar:   { accent: "#84d5f3", bg: "#84d5f3", text: "#1b1b1b" },
-  aktivitet: { accent: "#81c997", bg: "#81c997", text: "#1b1b1b" },
-  sport:     { accent: "#81c997", bg: "#81c997", text: "#1b1b1b" },
-  tur:       { accent: "#81c997", bg: "#81c997", text: "#1b1b1b" },
-  film:      { accent: "#e0d4c0", bg: "#e0d4c0", text: "#3d3020" },
-  sosial:    { accent: "#e0d4c0", bg: "#e0d4c0", text: "#3d3020" },
+  revy:        { accent: "#fdbc5b", bg: "#fdbc5b", text: "#1b1b1b" },
+  konsert:     { accent: "#f26f7a", bg: "#f26f7a", text: "white" },
+  fest:        { accent: "#e478c3", bg: "#e478c3", text: "white" },
+  familie:     { accent: "#f0a86e", bg: "#f0a86e", text: "#1b1b1b" },
+  aktivitet:   { accent: "#81c997", bg: "#81c997", text: "#1b1b1b" },
+  tur:         { accent: "#5eb8b0", bg: "#5eb8b0", text: "#1b1b1b" },
+  konkurranse: { accent: "#84d5f3", bg: "#84d5f3", text: "#1b1b1b" },
 };
 const defaultColor = { accent: "#fdbc5b", bg: "#fdbc5b", text: "#1b1b1b" };
 
 const colorFor = (type: string) => typeColors[type.toLowerCase()] || defaultColor;
-const accentForType = (type: string) => colorFor(type).accent;
+const accentFor = (event: ProgramItem) => event.accent || colorFor(event.type || "Aktivitet").accent;
 const badgeStyle = (type: string) => {
   const c = colorFor(type);
   return `background:${c.bg};color:${c.text}`;
@@ -71,27 +70,7 @@ const badgeStyle = (type: string) => {
   <div class="program-page">
 
     <!-- ── Hero ── -->
-    <section class="relative mt-20 sm:mt-24">
-      <div class="mx-auto max-w-6xl px-6 pt-10 sm:pt-14">
-        <div class="relative overflow-hidden rounded-3xl bg-[#fdbc5b]">
-          <div class="hero-dot-bg absolute inset-0 pointer-events-none" aria-hidden="true"></div>
-          <div class="absolute -top-20 -right-20 h-72 w-72 rounded-full bg-[#f26f7a]/25 blur-3xl pointer-events-none" aria-hidden="true"></div>
-          <div class="absolute -bottom-16 -left-16 h-56 w-56 rounded-full bg-[#81c997]/30 blur-3xl pointer-events-none" aria-hidden="true"></div>
-          <div class="pointer-events-none absolute inset-3 rounded-2xl border border-white/25" aria-hidden="true"></div>
-          <div class="hero-photo-panel absolute right-0 top-0 bottom-0 w-[44%] hidden lg:block" aria-hidden="true">
-            <img src={cloudUrl("skiogmagi_2025_1_yweuhz", 1000)} alt="" class="w-full h-full object-cover" loading="eager" />
-            <div class="absolute inset-0" style="background: linear-gradient(to right, #fdbc5b 0%, transparent 30%)"></div>
-            <div class="absolute inset-0" style="background: linear-gradient(to top, #fdbc5b 0%, transparent 20%)"></div>
-          </div>
-          <div class="relative px-8 py-14 sm:px-12 sm:py-20 lg:max-w-[58%]">
-            <span class="inline-flex items-center rounded-full bg-[#1b1b1b] px-4 py-1.5 text-xs font-bold uppercase tracking-[0.2em] text-white shadow-sm">U.-KA. 2026</span>
-            <h1 class="mt-4 text-5xl font-extrabold tracking-tight text-[#1b1b1b] leading-[1.05] sm:text-6xl">{pageTitle}</h1>
-            <p class="mt-3 text-lg font-semibold text-[#1b1b1b]/70">{dateRange}</p>
-            <p class="mt-3 max-w-md text-[#1b1b1b]/60 leading-relaxed text-[0.95rem]">{desc}</p>
-          </div>
-        </div>
-      </div>
-    </section>
+    <PageHero title={pageTitle} dateRange={dateRange} description={desc} />
 
     <!-- ── Sticky day nav ── -->
     <nav class="day-nav-sticky" aria-label="Hopp til dato">
@@ -111,7 +90,7 @@ const badgeStyle = (type: string) => {
     <div class="mx-auto max-w-6xl px-6 pb-20 pt-6">
       <div class="space-y-16">
         {days.map((day) => {
-          const events = day.schedule ?? [];
+          const programItems = (day.schedule ?? []).filter((item) => !item.disabled);
           return (
             <section id={day.id} class="day-section">
               <div class="day-header">
@@ -120,14 +99,15 @@ const badgeStyle = (type: string) => {
                   <h2 class="day-header__date">{day.dateLabel ?? "Dato kommer"}</h2>
                   {day.summary && <p class="day-header__summary">{day.summary}</p>}
                 </div>
-                <span class="day-count">{formatCount(events.length)}</span>
+                <span class="day-count">{formatCount(programItems.length)}</span>
               </div>
 
-              {events.length > 0 ? (
-                <div class={`day-grid${events.length === 1 ? " day-grid--solo" : ""}`}>
-                  {events.map((event) => {
-                    const type = event.type || "Opplevelse";
-                    const accent = accentForType(type);
+              {programItems.length > 0 ? (
+                <div class={`day-grid${programItems.length === 1 ? " day-grid--solo" : ""}`}>
+                  {programItems.map((event) => {
+                    const type = event.type || "Aktivitet";
+                    const accent = accentFor(event);
+                    const cardImage = resolveProgramImage(event);
                     return (
                       <article
                         class="event-card"
@@ -148,15 +128,15 @@ const badgeStyle = (type: string) => {
                           </div>
                         </div>
 
-                        {event.img ? (
+                        {cardImage ? (
                           <button
                             type="button"
                             class="event-card__banner"
-                            data-lightbox-src={cloudUrl(event.img, 1600)}
+                            data-lightbox-src={cloudUrl(event.poster || cardImage, 1200)}
                             data-lightbox-caption={event.caption || `${event.title}${event.time ? ` · ${event.time}` : ""}`}
                             aria-label={`Vis plakat for ${event.title}`}
                           >
-                            <img src={cloudUrl(event.img, 700)} alt={event.alt || `Plakat for ${event.title}`} loading="lazy" draggable="false" />
+                            <img src={cloudUrl(cardImage, 600)} alt={event.alt || `Bilde for ${event.title}`} loading="lazy" draggable="false" />
                             <div class="event-card__banner-overlay"></div>
                             <div class="event-card__banner-zoom" aria-hidden="true">
                               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4">
@@ -207,6 +187,9 @@ const badgeStyle = (type: string) => {
             <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
           </svg>
         </button>
+        <div class="poster-lightbox__skeleton" id="poster-lightbox-skeleton">
+          <div class="poster-lightbox__skeleton-shimmer"></div>
+        </div>
         <img class="poster-lightbox__img" src="" alt="Plakat" />
         <div class="poster-lightbox__caption" id="poster-lightbox-caption"></div>
       </div>
@@ -264,14 +247,22 @@ const badgeStyle = (type: string) => {
       const lbImg = lb.querySelector(".poster-lightbox__img");
       const lbCaption = document.getElementById("poster-lightbox-caption");
       const lbClose = lb.querySelector(".poster-lightbox__close");
+      const lbSkeleton = document.getElementById("poster-lightbox-skeleton");
 
       const openLb = (src, caption) => {
+        lbImg.style.opacity = "0";
+        if (lbSkeleton) lbSkeleton.style.display = "";
         lbImg.src = src;
         if (lbCaption) lbCaption.textContent = caption || "";
         lb.classList.add("is-open");
         lb.setAttribute("aria-hidden", "false");
         document.body.style.overflow = "hidden";
       };
+
+      lbImg.addEventListener("load", () => {
+        lbImg.style.opacity = "1";
+        if (lbSkeleton) lbSkeleton.style.display = "none";
+      });
 
       const closeLb = () => {
         lb.classList.remove("is-open");
@@ -293,6 +284,24 @@ const badgeStyle = (type: string) => {
         if (e.key === "Escape" && lb.classList.contains("is-open")) closeLb();
       });
     }
+
+    // Auto-scroll to today's section — only in installed webapp (standalone) mode
+    var isApp = window.matchMedia("(display-mode: standalone)").matches
+             || window.navigator.standalone === true;
+    if (isApp && !location.hash) {
+      var today = new Date().toISOString().slice(0, 10);
+      var daySections = Array.from(document.querySelectorAll(".day-section"));
+      var target = null;
+      for (var i = 0; i < daySections.length; i++) {
+        if (daySections[i].id >= today) { target = daySections[i]; break; }
+      }
+      if (!target && daySections.length) target = daySections[daySections.length - 1];
+      if (target) {
+        requestAnimationFrame(function () {
+          target.scrollIntoView({ behavior: "smooth" });
+        });
+      }
+    }
   })();
 </script>
 
@@ -300,12 +309,8 @@ const badgeStyle = (type: string) => {
   .program-page {
     background: #f7ecd8;
     min-height: 100svh;
+    overflow-x: clip;
     --program-anchor-offset: 160px;
-  }
-
-  .hero-dot-bg {
-    background-image: radial-gradient(circle, rgba(27, 27, 27, 0.1) 1.5px, transparent 1.5px);
-    background-size: 26px 26px;
   }
 
   /* Sticky nav */
@@ -619,13 +624,14 @@ const badgeStyle = (type: string) => {
     text-transform: uppercase;
   }
 
-  /* JS badge colours */
-  .bg-ev-pink   { background: #f26f7a; color: white; }
-  .bg-ev-yellow { background: #fdbc5b; color: #1b1b1b; }
-  .bg-ev-blue   { background: #84d5f3; color: #1b1b1b; }
-  .bg-ev-mint   { background: #81c997; color: #1b1b1b; }
-  .bg-ev-sand   { background: #eadfd0; color: #555; }
-  .bg-ev-neutral{ background: #f0f0f0; color: #555; }
+  /* Badge colour utility classes */
+  .bg-ev-gold    { background: #fdbc5b; color: #1b1b1b; }
+  .bg-ev-coral   { background: #f26f7a; color: white; }
+  .bg-ev-magenta { background: #e478c3; color: white; }
+  .bg-ev-peach   { background: #f0a86e; color: #1b1b1b; }
+  .bg-ev-mint    { background: #81c997; color: #1b1b1b; }
+  .bg-ev-teal    { background: #5eb8b0; color: #1b1b1b; }
+  .bg-ev-blue    { background: #84d5f3; color: #1b1b1b; }
 
   .event-time {
     font-size: 0.72rem;
@@ -710,12 +716,15 @@ const badgeStyle = (type: string) => {
 
   .event-card__banner-placeholder-type {
     position: relative;
-    font-size: 0.7rem;
-    font-weight: 800;
+    font-size: 1.1rem;
+    font-weight: 900;
     text-transform: uppercase;
-    letter-spacing: 0.18em;
-    color: rgba(255, 255, 255, 0.35);
-    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.1);
+    letter-spacing: 0.14em;
+    color: rgba(255, 255, 255, 0.5);
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+    text-align: center;
+    line-height: 1.2;
+    max-width: 80%;
   }
 
   /* Banner zoom indicator */
@@ -734,13 +743,19 @@ const badgeStyle = (type: string) => {
     backdrop-filter: blur(6px);
     -webkit-backdrop-filter: blur(6px);
     color: white;
-    opacity: 0;
+    opacity: 1;
     transition: opacity 180ms ease;
     pointer-events: none;
   }
 
-  .event-card__banner:hover .event-card__banner-zoom {
-    opacity: 1;
+  @media (min-width: 768px) {
+    .event-card__banner-zoom {
+      opacity: 0;
+    }
+
+    .event-card__banner:hover .event-card__banner-zoom {
+      opacity: 1;
+    }
   }
 
   /* Poster Lightbox */
@@ -818,5 +833,38 @@ const badgeStyle = (type: string) => {
 
   .poster-lightbox__close:hover {
     background: rgba(0, 0, 0, 0.6);
+  }
+
+  .poster-lightbox__img {
+    transition: opacity 200ms ease;
+  }
+
+  .poster-lightbox__skeleton {
+    width: 280px;
+    height: 400px;
+    border-radius: 0.75rem;
+    background: rgba(255, 255, 255, 0.08);
+    overflow: hidden;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .poster-lightbox__skeleton-shimmer {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.06) 50%,
+      transparent 100%
+    );
+    animation: lb-shimmer 1.4s ease-in-out infinite;
+  }
+
+  @keyframes lb-shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
   }
 </style>
