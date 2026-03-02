@@ -1,20 +1,15 @@
 ---
 import PageLayout from "../layouts/PageLayout.astro";
 import Footer from "../components/Footer.astro";
+import { getCollection } from "astro:content";
 
-type RevyShow = {
-  title: string;
-  day: string;
-  date: string;
-  time: string;
-  location: string;
-  description: string;
-  banner?: string;
-  ticketUrl?: string;
-};
+const revyEntries = await getCollection("revy");
+const revyShows = revyEntries
+  .map((e) => e.data)
+  .sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
 
 const pageTitle = "Revyen";
-const dateRange = "13.–14. mars 2026";
+const dateRange = "12.–13. mars 2026";
 const description =
   "U.-KA.-Revyen er sceneshowet under U.-KA. med humor, musikk og studentliv i fokus.";
 const ticketHref = "https://tikkio.com/organizer/2624-ass-alesund-studentsamfunn";
@@ -22,44 +17,10 @@ const ticketHref = "https://tikkio.com/organizer/2624-ass-alesund-studentsamfunn
 const cloudName = import.meta.env.PUBLIC_CLOUDINARY_CLOUD_NAME;
 const cloudUrl = (id: string, w = 800) =>
   `https://res.cloudinary.com/${cloudName}/image/upload/f_auto,q_auto,w_${w}/${id}`;
-const revyShowImage = "/images/revy-poster-temp.png";
 const resolveImageUrl = (src?: string, w = 800) => {
   if (!src) return "";
   return src.startsWith("/") ? src : cloudUrl(src, w);
 };
-
-const revyShows: RevyShow[] = [
-  {
-    title: "U.-KA. Revyen",
-    day: "Torsdag",
-    date: "12. mars",
-    time: "18:00",
-    location: "Parken Kulturhus",
-    description: "Første forestilling fredag kveld.",
-    banner: revyShowImage,
-    ticketUrl: "https://tikkio.com/events/62367-u-ka-revyen-torsdag-12-mars-2026-1800",
-  },
-  {
-    title: "U.-KA. Revyen",
-    day: "Torsdag",
-    date: "12. mars",
-    time: "21:00",
-    location: "Parken Kulturhus",
-    description: "Senforestilling med fullt revytrykk.",
-    banner: revyShowImage,
-    ticketUrl: "https://tikkio.com/events/62373-u-ka-revyen-torsdag-12-mars-2026-1800",
-  },
-  {
-    title: "U.-KA. Revyen",
-    day: "Fredag",
-    date: "13. mars",
-    time: "18:00",
-    location: "Parken Kulturhus",
-    description: "Ekstraforestilling lørdag kveld.",
-    banner: revyShowImage,
-    ticketUrl: "https://tikkio.com/events/62374-u-ka-revyen-torsdag-12-mars-2026-1800",
-  },
-];
 
 const showCountLabel =
   revyShows.length === 1 ? "1 forestilling" : `${revyShows.length} forestillinger`;
@@ -99,7 +60,7 @@ const showCountLabel =
           <div>
             <p class="day-header__label">Forestillinger</p>
             <h2 class="day-header__date">Revyprogram</h2>
-            <p class="day-header__summary">Sketsjer, musikk og studenthumor på scenen i Parken Kulturhus.</p>
+            <p class="day-header__summary">Sketsjer, musikk og studenthumor på Arbeideren Kulturhus.</p>
           </div>
           <span class="day-count">{showCountLabel}</span>
         </div>
@@ -157,39 +118,62 @@ const showCountLabel =
         </div>
 
         <article id="revy-video" class="video-card">
-          <h3>Se fjorårets show</h3>
-          <p>Her er et opptak fra U.-KA.-Revyen i fjor.</p>
-          <div class="video-embed-wrap">
-            <iframe
-              src="https://www.youtube.com/embed/jQb8wMhtyXY"
-              title="U.-KA.-Revyen fra i fjor"
-              loading="lazy"
-              referrerpolicy="strict-origin-when-cross-origin"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowfullscreen
-            ></iframe>
+          <div class="video-card__sidebar">
+            <div class="video-card__dot-bg" aria-hidden="true"></div>
+            <div class="video-card__text">
+              <span class="video-card__badge">Video</span>
+              <h3>Se fjorårets show</h3>
+              <p>Her er opptak fra U.-KA.-Revyen i 2025. Sketsjer, musikk og studenthumor fra scena.</p>
+            </div>
+          </div>
+          <div class="video-card__main">
+            <div class="video-embed-wrap">
+              <iframe
+                src="https://www.youtube.com/embed/jQb8wMhtyXY"
+                title="U.-KA.-Revyen fra i fjor"
+                loading="lazy"
+                referrerpolicy="strict-origin-when-cross-origin"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen
+              ></iframe>
+            </div>
           </div>
         </article>
 
         <div class="info-grid">
-          <article class="info-card">
-            <h3>Hva er U.-KA.-Revyen?</h3>
+          <article class="info-card" style="--card-accent: #fdbc5b">
+            <div class="info-card__header">
+              <div class="info-card__icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-5"><path d="M11.7 2.805a.75.75 0 0 1 .6 0A60.65 60.65 0 0 1 22.83 8.72a.75.75 0 0 1-.231 1.337 49.948 49.948 0 0 0-9.902 3.912l-.003.002-.34.18a.75.75 0 0 1-.707 0A50.88 50.88 0 0 0 7.5 12.174v-.224c0-.131.067-.248.172-.311a54.615 54.615 0 0 1 4.653-2.52.75.75 0 0 0-.65-1.352 56.123 56.123 0 0 0-4.78 2.589 1.858 1.858 0 0 0-.859 1.228 49.803 49.803 0 0 0-4.634-1.527.75.75 0 0 1-.231-1.337A60.653 60.653 0 0 1 11.7 2.805Z" /><path d="M13.06 15.473a48.45 48.45 0 0 1 7.666-3.282c.134 1.414.22 2.843.255 4.284a.75.75 0 0 1-.46.711 47.87 47.87 0 0 0-8.105 4.342.75.75 0 0 1-.832 0 47.87 47.87 0 0 0-8.104-4.342.75.75 0 0 1-.461-.71c.035-1.442.121-2.87.255-4.286a48.4 48.4 0 0 1 9.786 3.283.75.75 0 0 0 .832 0h-.001Z" /><path d="M8.25 8.689a49.209 49.209 0 0 0-2.861 1.118c-.157.066-.324.057-.472-.02A60.594 60.594 0 0 1 .64 7.196a.75.75 0 0 1 .399-1.34 49.453 49.453 0 0 0 7.21 1.833Z" /></svg>
+              </div>
+              <h3>Hva er U.-KA.-Revyen?</h3>
+            </div>
             <p>
               Et studentdrevet sceneshow med humor, musikalske innslag og lokale referanser. Revyen produseres
-              av studenter i Ålesund Studentsamfunn.
+              av Ålesund Studentsamfunn med studenter fra alle retninger.
             </p>
           </article>
-          <article class="info-card">
-            <h3>Billetter</h3>
+          <article class="info-card" style="--card-accent: #f26f7a">
+            <div class="info-card__header">
+              <div class="info-card__icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-5"><path fill-rule="evenodd" d="M1.5 6.375c0-1.036.84-1.875 1.875-1.875h17.25c1.035 0 1.875.84 1.875 1.875v3.026a.75.75 0 0 1-.375.65 2.249 2.249 0 0 0 0 3.898.75.75 0 0 1 .375.65v3.026c0 1.035-.84 1.875-1.875 1.875H3.375A1.875 1.875 0 0 1 1.5 17.625v-3.026a.75.75 0 0 1 .374-.65 2.249 2.249 0 0 0 0-3.898.75.75 0 0 1-.374-.65V6.375Zm15-1.125a.75.75 0 0 1 .75.75v.75a.75.75 0 0 1-1.5 0V6a.75.75 0 0 1 .75-.75Zm.75 4.5a.75.75 0 0 0-1.5 0v.75a.75.75 0 0 0 1.5 0v-.75Zm-.75 3a.75.75 0 0 1 .75.75v.75a.75.75 0 0 1-1.5 0v-.75a.75.75 0 0 1 .75-.75Zm.75 4.5a.75.75 0 0 0-1.5 0V18a.75.75 0 0 0 1.5 0v-.75ZM6 12a.75.75 0 0 1 .75-.75H12a.75.75 0 0 1 0 1.5H6.75A.75.75 0 0 1 6 12Zm.75 2.25a.75.75 0 0 0 0 1.5h3a.75.75 0 0 0 0-1.5h-3Z" clip-rule="evenodd" /></svg>
+              </div>
+              <h3>Billetter</h3>
+            </div>
             <p>
               Billetter kjøpes via Tikkio. Der finner du oppdatert status for tilgjengelige forestillinger.
             </p>
-            <a href={ticketHref} target="_blank" rel="noreferrer" class="inline-link">Gå til billettsiden</a>
+            <a href={ticketHref} target="_blank" rel="noreferrer" class="info-card__link">Gå til billettsiden &rarr;</a>
           </article>
-          <article class="info-card">
-            <h3>Spørsmål</h3>
+          <article class="info-card" style="--card-accent: #84d5f3">
+            <div class="info-card__header">
+              <div class="info-card__icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-5"><path fill-rule="evenodd" d="M4.848 2.771A49.144 49.144 0 0 1 12 2.25c2.43 0 4.817.178 7.152.52 1.978.292 3.348 2.024 3.348 3.97v6.02c0 1.946-1.37 3.678-3.348 3.97a48.901 48.901 0 0 1-3.476.383.39.39 0 0 0-.297.17l-2.755 4.133a.75.75 0 0 1-1.248 0l-2.755-4.133a.39.39 0 0 0-.297-.17 48.9 48.9 0 0 1-3.476-.384c-1.978-.29-3.348-2.024-3.348-3.97V6.741c0-1.946 1.37-3.68 3.348-3.97ZM6.75 8.25a.75.75 0 0 1 .75-.75h9a.75.75 0 0 1 0 1.5h-9a.75.75 0 0 1-.75-.75Zm.75 2.25a.75.75 0 0 0 0 1.5H12a.75.75 0 0 0 0-1.5H7.5Z" clip-rule="evenodd" /></svg>
+              </div>
+              <h3>Spørsmål</h3>
+            </div>
             <p>
-              Kontakt arrangør på <a href="mailto:ukaa@astudent.no" class="inline-link">ukaa@astudent.no</a>
+              Kontakt arrangør på <a href="mailto:ukaa@astudent.no" class="info-card__link">ukaa@astudent.no</a>
               for spørsmål om forestilling, tilgjengelighet eller billetter.
             </p>
           </article>
@@ -339,7 +323,8 @@ const showCountLabel =
     background: white;
     border: 1px solid rgba(0, 0, 0, 0.07);
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-    overflow: hidden;
+    overflow: clip;
+    will-change: transform;
     transition: transform 220ms ease, box-shadow 220ms ease;
     --event-accent: #fdbc5b;
     cursor: pointer;
@@ -365,7 +350,7 @@ const showCountLabel =
   .event-card__banner {
     position: relative;
     aspect-ratio: 16 / 9;
-    overflow: hidden;
+    overflow: clip;
     flex-shrink: 0;
   }
 
@@ -374,11 +359,6 @@ const showCountLabel =
     height: 100%;
     object-fit: cover;
     display: block;
-    transition: transform 400ms ease;
-  }
-
-  .event-card:hover .event-card__banner img {
-    transform: scale(1.06);
   }
 
   .event-card__banner-overlay {
@@ -502,31 +482,72 @@ const showCountLabel =
     border: 1px solid rgba(0, 0, 0, 0.07);
     background: #fff;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-    padding: 1.2rem;
+    overflow: hidden;
     margin-bottom: 1.1rem;
   }
 
-  .video-card h3 {
-    color: #1b1b1b;
-    font-size: 1.15rem;
-    font-weight: 800;
-    margin-bottom: 0.35rem;
+  .video-card__sidebar {
+    position: relative;
+    background: #fdbc5b;
+    padding: 1.25rem 1.5rem;
+    overflow: hidden;
   }
 
-  .video-card p {
-    font-size: 0.9rem;
-    line-height: 1.6;
-    color: #555;
-    margin-bottom: 0.85rem;
+  .video-card__dot-bg {
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle, rgba(27, 27, 27, 0.08) 1.5px, transparent 1.5px);
+    background-size: 20px 20px;
+    pointer-events: none;
+  }
+
+  .video-card__text {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .video-card__badge {
+    display: inline-flex;
+    align-items: center;
+    background: #1b1b1b;
+    color: #fff;
+    font-size: 0.6rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    padding: 0.3rem 0.65rem;
+    border-radius: 999px;
+  }
+
+  .video-card__text h3 {
+    color: #1b1b1b;
+    font-size: 1.1rem;
+    font-weight: 800;
+    line-height: 1.2;
+  }
+
+  .video-card__text p {
+    width: 100%;
+    font-size: 0.82rem;
+    line-height: 1.5;
+    color: #1b1b1b88;
+    margin-top: -0.15rem;
+  }
+
+  .video-card__main {
+    padding: 0.75rem;
   }
 
   .video-embed-wrap {
     position: relative;
     width: 100%;
     aspect-ratio: 16 / 9;
-    border-radius: 0.9rem;
+    border-radius: 0.75rem;
     overflow: hidden;
-    background: #111;
+    background: #1b1b1b;
   }
 
   .video-embed-wrap iframe {
@@ -543,31 +564,66 @@ const showCountLabel =
   }
 
   .info-card {
+    --card-accent: #fdbc5b;
     border-radius: 1.25rem;
     border: 1px solid rgba(0, 0, 0, 0.07);
+    border-top: 3px solid var(--card-accent);
     background: #fff;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-    padding: 1.2rem;
+    padding: 1.3rem;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .info-card__header {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 0.55rem;
+  }
+
+  .info-card__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 0.5rem;
+    background: var(--card-accent);
+    color: #1b1b1b;
+    flex-shrink: 0;
+  }
+
+  .info-card__icon svg {
+    width: 1.1rem;
+    height: 1.1rem;
   }
 
   .info-card h3 {
     color: #1b1b1b;
-    font-size: 1.15rem;
+    font-size: 1.05rem;
     font-weight: 800;
-    margin-bottom: 0.45rem;
   }
 
   .info-card p {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     line-height: 1.6;
-    color: #555;
+    color: #666;
   }
 
-  .inline-link {
+  .info-card__link {
+    display: inline-block;
+    margin-top: 0.6rem;
     color: #7f5105;
     text-decoration: underline;
     text-decoration-thickness: 1.5px;
     text-underline-offset: 2px;
+    font-size: 0.82rem;
     font-weight: 700;
+    transition: color 150ms ease;
+  }
+
+  .info-card__link:hover {
+    color: #b07508;
   }
 </style>
