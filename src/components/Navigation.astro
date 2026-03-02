@@ -9,7 +9,9 @@ const links = [
 ];
 
 const ticketLink = { name: "Billetter", href: "https://tikkio.com/organizer/2624-ass-alesund-studentsamfunn" };
-const currentPath = Astro.url?.pathname || "/";
+const rawPath = Astro.url?.pathname || "/";
+const currentPath = rawPath === "/" ? "/" : rawPath.replace(/\/$/, "");
+const isActive = (href: string) => currentPath === (href === "/" ? "/" : href.replace(/\/$/, ""));
 ---
 
 <header id="site-header" class="fixed top-0 left-0 w-full z-50">
@@ -23,7 +25,7 @@ const currentPath = Astro.url?.pathname || "/";
       <!-- Desktop Menu -->
       <div class="items-center hidden gap-6 text-nowrap font-medium md:flex">
         {links.map((l) => (
-          <a href={l.href} class={`relative transition-colors duration-300 hover:opacity-90 ${currentPath === l.href ? "nav-link--active" : ""}`}>
+          <a href={l.href} class={`relative transition-colors duration-300 hover:opacity-90 ${isActive(l.href) ? "nav-link--active" : ""}`}>
             {l.name}
           </a>
         ))}
@@ -45,7 +47,7 @@ const currentPath = Astro.url?.pathname || "/";
     <div data-mobile-menu id="mobile-nav-menu" class="text-nowrap flex-col py-5 space-y-5 md:hidden">
       {links.map((l) => (
         <div class="block">
-          <a href={l.href} class={`inline font-medium transition-colors ${currentPath === l.href ? "nav-link--active" : "opacity-80 hover:opacity-100"}`}>
+          <a href={l.href} class={`inline font-medium transition-colors ${isActive(l.href) ? "nav-link--active" : "opacity-80 hover:opacity-100"}`}>
             {l.name}
           </a>
         </div>
