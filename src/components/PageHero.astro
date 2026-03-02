@@ -8,6 +8,7 @@ export interface Props {
   description?: string;
   bgColor?: string;
   heroImage?: string;
+  overlayLogo?: ImageMetadata;
 }
 
 const {
@@ -17,6 +18,7 @@ const {
   description,
   bgColor = "#fdbc5b",
   heroImage = "familiedag_farge2_owkpxt",
+  overlayLogo,
 } = Astro.props as Props;
 ---
 
@@ -33,7 +35,14 @@ const {
           <img src={cloudUrl(heroImage, 800)} alt="" class="w-full h-full object-cover" loading="eager" />
           <div class="absolute inset-0" style={`background: linear-gradient(to right, ${bgColor} 0%, transparent 30%)`}></div>
           <div class="absolute inset-0" style={`background: linear-gradient(to top, ${bgColor} 0%, transparent 20%)`}></div>
+          {overlayLogo && (
+            <img src={overlayLogo.src} alt="" class="page-hero__overlay-logo absolute" draggable="false" />
+          )}
         </div>
+      )}
+
+      {overlayLogo && (
+        <img src={overlayLogo.src} alt="" class="page-hero__overlay-logo--mobile absolute lg:hidden" draggable="false" />
       )}
 
       <div class="relative px-8 py-14 sm:px-12 sm:py-20 lg:max-w-[58%]">
@@ -51,5 +60,33 @@ const {
   .page-hero__dots {
     background-image: radial-gradient(circle, rgba(27, 27, 27, 0.1) 1.5px, transparent 1.5px);
     background-size: 26px 26px;
+  }
+
+  .page-hero__overlay-logo {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 55%;
+    max-width: 220px;
+    pointer-events: none;
+    filter: drop-shadow(0 4px 20px rgba(0, 0, 0, 0.35));
+    z-index: 2;
+  }
+
+  .page-hero__overlay-logo--mobile {
+    top: 3.5rem;
+    right: 2rem;
+    width: 44px;
+    z-index: 3;
+    pointer-events: none;
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.25));
+  }
+
+  @media (min-width: 640px) {
+    .page-hero__overlay-logo--mobile {
+      top: 5rem;
+      right: 3rem;
+      width: 52px;
+    }
   }
 </style>

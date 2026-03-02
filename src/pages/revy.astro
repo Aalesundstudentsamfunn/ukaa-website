@@ -4,6 +4,7 @@ import PageHero from "../components/PageHero.astro";
 import Footer from "../components/Footer.astro";
 import { getCollection } from "astro:content";
 import { resolveImageUrl } from "../utils/cloudinary";
+import revyLogo from "../assets/images/revy_logo.svg";
 
 const revyEntries = await getCollection("revy");
 const revyShows = revyEntries
@@ -22,7 +23,7 @@ const showCountLabel =
 
 <PageLayout title={pageTitle} description={description}>
   <div class="revy-page">
-    <PageHero title="U.-KA.-Revyen" dateRange={dateRange} description={description} heroImage="revy_innslag_awgihf">
+    <PageHero title="U.-KA.-Revyen" dateRange={dateRange} description={description} heroImage="revy_innslag_awgihf" overlayLogo={revyLogo}>
       <div class="mt-6 flex flex-wrap gap-3">
         <a href={ticketHref} target="_blank" rel="noreferrer" class="hero-pill hero-pill--solid">Kjøp billetter</a>
         <a href="#praktisk" class="hero-pill hero-pill--ghost">Se video</a>
