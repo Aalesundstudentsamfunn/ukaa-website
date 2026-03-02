@@ -6,7 +6,20 @@ const hero = defineCollection({
     titleAriaLabel: z.string(),
     subtitle: z.string(),
     ctaLabel: z.string(),
+    heroImage: z.string().optional(),
     order: z.number().optional(),
+  }),
+});
+
+const about = defineCollection({
+  type: "content",
+  schema: z.object({
+    title: z.string(),
+    badge: z.string().optional(),
+    paragraphs: z.array(z.string()),
+    heroImg: z.string(),
+    img2: z.string().optional(),
+    img3: z.string().optional(),
   }),
 });
 
@@ -101,6 +114,7 @@ const revy = defineCollection({
 
 export const collections = {
   hero,
+  about,
   events,
   featured,
   revy,
