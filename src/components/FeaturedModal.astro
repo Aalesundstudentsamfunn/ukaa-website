@@ -14,9 +14,15 @@ export interface Props {
 
 const { id, title, tag, blurb, gallery = [], accent } = Astro.props as Props;
 
-const galleryItems = gallery.map((g) =>
-  typeof g === "string" ? { src: g, alt: undefined, caption: undefined } : g,
-);
+const galleryItems = gallery.map((g) => {
+  if (typeof g === "string") {
+    return { src: g.trim(), alt: undefined, caption: undefined };
+  }
+  return {
+    ...g,
+    src: String(g.src || "").trim(),
+  };
+});
 
 const headingId = `${id}-title`;
 ---
@@ -347,7 +353,7 @@ const headingId = `${id}-title`;
       var counter = lightboxEl.querySelector(".lightbox__counter");
       var prevBtn = lightboxEl.querySelector(".lightbox__nav--prev");
       var nextBtn = lightboxEl.querySelector(".lightbox__nav--next");
-      var url = buildUrl(item.src);
+      var url = buildUrl((item.src || "").trim());
 
       // Size skeleton and wrapper from previous image or default 4:3
       if (img.naturalWidth && img.naturalHeight) {
@@ -363,6 +369,13 @@ const headingId = `${id}-title`;
       img.onload = function () {
         img.style.opacity = "1";
         if (skeleton) skeleton.style.display = "none";
+        if (imgwrap) { imgwrap.style.minWidth = ""; imgwrap.style.minHeight = ""; }
+      };
+
+      img.onerror = function () {
+        // Avoid a permanent loading skeleton when a single image URL is invalid.
+        if (skeleton) skeleton.style.display = "none";
+        img.style.opacity = "0.25";
         if (imgwrap) { imgwrap.style.minWidth = ""; imgwrap.style.minHeight = ""; }
       };
 

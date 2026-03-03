@@ -23,6 +23,11 @@ const {
 </html>
 
 <script>
+  window.addEventListener("vite:preloadError", (event) => {
+    event.preventDefault();
+    window.location.reload();
+  });
+
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("/sw.js").catch(console.error);
   }
