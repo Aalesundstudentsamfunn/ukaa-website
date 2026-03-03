@@ -20,10 +20,10 @@ const rawTitle = title || siteName;
 const isHome = rawTitle === siteName;
 
 // Browser tab title
-const fullTitle = isHome ? siteName : `${rawTitle} | ${siteName}`;
+const fullTitle = isHome ? `${siteName} / Ålesund` : `${siteName} / ${rawTitle}`;
 
 // OG/Twitter titles
-const socialTitle = isHome ? siteName : `${rawTitle} - ${siteName}`;
+const socialTitle = isHome ? `${siteName} / Ålesund` : `${siteName} / ${rawTitle}`;
 
 // Always use the same OG image
 const ogImage = "/og-image.png";
