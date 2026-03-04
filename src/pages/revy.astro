@@ -61,7 +61,12 @@ const showCountLabel =
                 </div>
                 {show.banner && (
                   <div class="event-card__banner">
-                    <img src={resolveImageUrl(show.banner, 600)} alt="" loading="lazy" draggable="false" />
+                    <img
+                      src={resolveImageUrl(show.banner, 600)}
+                      alt={show.alt || `Plakat for ${show.title}`}
+                      loading="lazy"
+                      draggable="false"
+                    />
                     <div class="event-card__banner-overlay"></div>
                   </div>
                 )}

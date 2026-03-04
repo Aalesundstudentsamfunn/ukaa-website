@@ -107,6 +107,7 @@ const revy = defineCollection({
     time: z.string(),
     location: z.string(),
     description: z.string(),
+    alt: z.string().optional(),
     banner: z.string().optional(),
     ticketUrl: z.string().optional(),
   }),
