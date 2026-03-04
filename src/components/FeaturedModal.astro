@@ -1,6 +1,4 @@
 ---
-import { CldImage } from "astro-cloudinary";
-
 type GalleryItem = string | { src: string; alt?: string; caption?: string };
 
 export interface Props {
@@ -82,15 +80,14 @@ const headingId = `${id}-title`;
                   data-caption={g.caption || ""}
                 >
                   <div class="absolute inset-0 skeleton" />
-                  <CldImage
+                  <img
+                    data-thumb
                     draggable="false"
-                    src={g.src}
                     alt={g.alt || `${title} bilde ${i + 1}`}
                     class="h-full w-full object-cover opacity-0 transition-opacity duration-300"
-                    sizes="(min-width: 640px) 33vw, 50vw"
                     loading="lazy"
+                    decoding="async"
                     fetchpriority="low"
-                    onload="this.style.opacity='1'; this.closest('[data-img-wrapper]')?.setAttribute('data-loaded','true');"
                   />
                 </figure>
               ))}
@@ -201,6 +198,69 @@ const headingId = `${id}-title`;
       if (!cloudName) return "";
       return "https://res.cloudinary.com/" + cloudName + "/image/upload/f_auto,q_auto,w_1200/" + publicId;
     };
+
+    var buildThumbUrl = function (publicId) {
+      if (!publicId) return "";
+      if (/^https?:\/\//.test(publicId)) return publicId;
+      if (!cloudName) return "";
+      return "https://res.cloudinary.com/" + cloudName + "/image/upload/f_auto,q_auto,w_600/" + publicId;
+    };
+
+    var thumbQueueCursor = 0;
+    var thumbQueueInFlight = 0;
+
+    var getThumbConcurrency = function () {
+      try {
+        return window.matchMedia("(max-width: 768px)").matches ? 3 : figures.length;
+      } catch (_) {
+        return 3;
+      }
+    };
+
+    var startThumbLoad = function (fig, img, src) {
+      thumbQueueInFlight += 1;
+
+      var done = function (failed) {
+        fig.setAttribute("data-loaded", "true");
+        img.style.opacity = failed ? "0.2" : "1";
+        thumbQueueInFlight = Math.max(0, thumbQueueInFlight - 1);
+        queueNextThumb();
+      };
+
+      img.onload = function () { done(false); };
+      img.onerror = function () { done(true); };
+      img.setAttribute("src", src);
+    };
+
+    var queueNextThumb = function () {
+      if (!dlg.hasAttribute("open")) return;
+
+      var limit = Math.max(1, getThumbConcurrency());
+      while (thumbQueueInFlight < limit && thumbQueueCursor < figures.length) {
+        var fig = figures[thumbQueueCursor++];
+        if (!fig) continue;
+        if (fig.getAttribute("data-loaded") === "true") continue;
+
+        var img = fig.querySelector("img[data-thumb]");
+        if (!img) {
+          fig.setAttribute("data-loaded", "true");
+          continue;
+        }
+
+        var src = buildThumbUrl((fig.getAttribute("data-public-id") || "").trim());
+        if (!src) {
+          fig.setAttribute("data-loaded", "true");
+          continue;
+        }
+
+        startThumbLoad(fig, img, src);
+      }
+    };
+
+    var openObserver = new MutationObserver(function () {
+      if (dlg.hasAttribute("open")) queueNextThumb();
+    });
+    openObserver.observe(dlg, { attributes: true, attributeFilter: ["open"] });
 
     var ensureLightbox = function () {
       // Ensure we never keep stale overlay/listener instances when users spam open/close.
