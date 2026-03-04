@@ -23,12 +23,60 @@ const {
 </html>
 
 <script>
-  window.addEventListener("vite:preloadError", (event) => {
-    event.preventDefault();
-    window.location.reload();
-  });
+  (() => {
+    const CHUNK_RELOAD_KEY = "ukaa:chunk-reload-ts";
+    const CHUNK_RELOAD_TTL_MS = 5 * 60 * 1000;
+    const CHUNK_URL_PATTERN = /\/_astro\/[^\s'"]+\.js\b/i;
+    const CHUNK_ERROR_PATTERN =
+      /(Failed to fetch dynamically imported module|Importing a module script failed|Loading chunk|ChunkLoadError)/i;
 
-  if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("/sw.js").catch(console.error);
-  }
+    const isChunkLoadError = (...parts) => {
+      const joined = parts.filter(Boolean).map((p) => String(p)).join(" ");
+      if (!joined) return false;
+
+      // Most reliable signal: hashed Astro JS chunk path present.
+      if (CHUNK_URL_PATTERN.test(joined)) return true;
+
+      // Fallback: generic chunk words only count if the error also references Astro assets.
+      return CHUNK_ERROR_PATTERN.test(joined) && joined.includes("/_astro/");
+    };
+
+    const tryReloadOnce = () => {
+      const now = Date.now();
+      const last = Number(sessionStorage.getItem(CHUNK_RELOAD_KEY) || "0");
+      if (last && now - last < CHUNK_RELOAD_TTL_MS) return;
+      sessionStorage.setItem(CHUNK_RELOAD_KEY, String(now));
+      window.location.reload();
+    };
+
+    window.addEventListener("vite:preloadError", (event) => {
+      event.preventDefault();
+      tryReloadOnce();
+    });
+
+    window.addEventListener("error", (event) => {
+      const message = String(event?.message || "");
+      const source = String(event?.filename || "");
+      const stack = String(event?.error?.stack || "");
+      if (!isChunkLoadError(message, source, stack)) return;
+      event.preventDefault?.();
+      tryReloadOnce();
+    });
+
+    window.addEventListener("unhandledrejection", (event) => {
+      const reason = event?.reason;
+      const message =
+        typeof reason === "string"
+          ? reason
+          : String(reason?.message || reason || "");
+      const stack = String(reason?.stack || "");
+      if (!isChunkLoadError(message, stack)) return;
+      event.preventDefault?.();
+      tryReloadOnce();
+    });
+
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("/sw.js").catch(() => {});
+    }
+  })();
 </script>

@@ -143,12 +143,33 @@ const headingId = `${id}-title`;
       closeWithAnim();
     });
 
+    var lightboxEl = null;
+    var lightboxKeyHandler = null;
+
+    var teardownLightbox = function () {
+      if (lightboxKeyHandler) {
+        document.removeEventListener("keydown", lightboxKeyHandler);
+        lightboxKeyHandler = null;
+      }
+
+      var overlays = Array.from(dlg.querySelectorAll(".lightbox"));
+      overlays.forEach(function (overlay) {
+        var img = overlay.querySelector(".lightbox__img");
+        if (img) {
+          img.onload = null;
+          img.onerror = null;
+          img.removeAttribute("src");
+        }
+        overlay.remove();
+      });
+
+      lightboxEl = null;
+    };
+
     dlg.addEventListener("close", function () {
       var scroller = dlg.querySelector(".gallery-scroll");
       if (scroller) scroller.classList.remove("lightbox-open");
-      var overlay = dlg.querySelector(".lightbox");
-      if (overlay) overlay.remove();
-      lightboxEl = null;
+      teardownLightbox();
       document.body.style.overflow = "";
     });
 
@@ -174,9 +195,6 @@ const headingId = `${id}-title`;
     });
     var currentIndex = 0;
 
-    // Lightbox
-    var lightboxEl = null;
-
     var buildUrl = function (publicId) {
       if (!publicId) return "";
       if (/^https?:\/\//.test(publicId)) return publicId;
@@ -185,7 +203,8 @@ const headingId = `${id}-title`;
     };
 
     var ensureLightbox = function () {
-      if (lightboxEl) return lightboxEl;
+      // Ensure we never keep stale overlay/listener instances when users spam open/close.
+      teardownLightbox();
       var wrap = document.createElement("div");
       wrap.className = "lightbox";
       wrap.innerHTML =
@@ -214,15 +233,12 @@ const headingId = `${id}-title`;
       var closeLb = function (e) {
         e.preventDefault();
         e.stopPropagation();
-        wrap.classList.remove("is-active");
-        setTimeout(function () { wrap.remove(); }, 120);
-        lightboxEl = null;
-        document.removeEventListener("keydown", onKey);
+        teardownLightbox();
         var scroller = dlg.querySelector(".gallery-scroll");
         if (scroller) scroller.classList.remove("lightbox-open");
       };
 
-      var onKey = function (e) {
+      lightboxKeyHandler = function (e) {
         if (e.key === "Escape") closeLb(e);
         if (e.key === "ArrowLeft") navigate(-1);
         if (e.key === "ArrowRight") navigate(1);
@@ -315,7 +331,7 @@ const headingId = `${id}-title`;
         }
       });
 
-      document.addEventListener("keydown", onKey);
+      document.addEventListener("keydown", lightboxKeyHandler);
       lightboxEl = wrap;
       return wrap;
     };
@@ -382,6 +398,10 @@ const headingId = `${id}-title`;
       img.setAttribute("src", url);
       img.setAttribute("alt", item.alt);
       img.setAttribute("draggable", "false");
+
+      if (!url) {
+        if (skeleton) skeleton.style.display = "none";
+      }
 
       if (captionEl) {
         captionEl.textContent = item.caption;

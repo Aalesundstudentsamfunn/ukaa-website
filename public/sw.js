@@ -1,4 +1,4 @@
-const CACHE_NAME = "ukaa-v1";
+const CACHE_NAME = "ukaa-v2";
 const PRECACHE = ["/", "/program/", "/revy/"];
 
 self.addEventListener("install", (e) => {
