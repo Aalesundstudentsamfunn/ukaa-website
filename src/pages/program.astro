@@ -587,7 +587,14 @@ const badgeStyle = (type: string) => {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center;
     display: block;
+  }
+
+  @media (min-width: 1024px) {
+    .event-card__banner img {
+      object-position: center 65%; /* Makes the U.-KA. branding on banners sit flush on desktop */
+    }
   }
 
   .event-card__banner-overlay {
