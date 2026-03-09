@@ -261,15 +261,22 @@ const badgeStyle = (type: string) => {
       const lbCaption = document.getElementById("poster-lightbox-caption");
       const lbClose = lb.querySelector(".poster-lightbox__close");
       const lbSkeleton = document.getElementById("poster-lightbox-skeleton");
+      const lbWrap = lb.querySelector(".poster-lightbox__wrap");
 
       const sizePosterSkeleton = (w, h) => {
         if (!lbSkeleton) return;
         const maxW = window.innerWidth - 64;
         const maxH = window.innerHeight - 64;
         const scale = Math.min(maxW / w, maxH / h, 1);
-        lbSkeleton.style.width = Math.round(w * scale) + "px";
-        lbSkeleton.style.height = Math.round(h * scale) + "px";
+        const sw = Math.round(w * scale) + "px";
+        const sh = Math.round(h * scale) + "px";
+        lbSkeleton.style.width = sw;
+        lbSkeleton.style.height = sh;
         lbSkeleton.style.aspectRatio = "";
+        if (lbWrap) {
+          lbWrap.style.width = sw;
+          lbWrap.style.height = sh;
+        }
       };
 
       const openLb = (src, caption, alt) => {
@@ -292,6 +299,18 @@ const badgeStyle = (type: string) => {
       lbImg.addEventListener("load", () => {
         lbImg.style.opacity = "1";
         if (lbSkeleton) lbSkeleton.style.display = "none";
+        if (lbWrap) {
+          lbWrap.style.width = "";
+          lbWrap.style.height = "";
+        }
+      });
+
+      lbImg.addEventListener("error", () => {
+        if (lbSkeleton) lbSkeleton.style.display = "none";
+        if (lbWrap) {
+          lbWrap.style.width = "";
+          lbWrap.style.height = "";
+        }
       });
 
       const closeLb = () => {
